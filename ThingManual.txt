@@ -106,9 +106,9 @@ system are variables and constraints. The unit of encapsulation used
 to assemble these elements into higher-level objects is the thing. A 
 thing has a collection of parts, where each part is either a primitive 
 variable or another thing. For example, a Node thing is composed of 
-a primitive variable named ‘value’ and a Point thing named 
-‘location’. This Point thing is in turn composed of two primitive 
-variables, named ‘x’ and ‘y’. In addition to its parts, a thing may also 
+a primitive variable named ‚Äòvalue‚Äô and a Point thing named 
+‚Äòlocation‚Äô. This Point thing is in turn composed of two primitive 
+variables, named ‚Äòx‚Äô and ‚Äòy‚Äô. In addition to its parts, a thing may also 
 have a set of constraints that define relationships among its parts 
 and subparts. For example, a HLine thing has such a constraint 
 stating that the y values of its two endpoint Point things should be 
@@ -142,7 +142,7 @@ The Construction Kit Metaphor
 
 The construction kit metaphor for thing construction has proven to 
 be a powerful mechanism for packaging and reusing constraint 
-“programs.” For example, a Quadrilateral may be constructed from 
+‚Äúprograms.‚Äù For example, a Quadrilateral may be constructed from 
 four Line things. The Quadrilateral may be turned into a Rectangle 
 by adding two horizontal and two vertical constraints. A center may 
 be added by stretching a MidPoint thing across the diagonal. Finally, 
@@ -150,8 +150,8 @@ the centers and corners of several instances of the resulting
 CenterRectangle may be combined with additional vertical and 
 horizontal constraints to produce a set of aligned boxes for a 
 diagram or a paned-window layout. Note that many of the 
-intermediate stages in this construction — Quadrilaterals, 
-Rectangles, and CenterRectangles — are re-usable objects in their 
+intermediate stages in this construction √ë Quadrilaterals, 
+Rectangles, and CenterRectangles √ë are re-usable objects in their 
 own right.
 
 Symbolic Strengths
@@ -319,7 +319,7 @@ interconnect an array of components with regular structure (e.g.
 laying out a chess board). The direct-manipulation interface is also 
 not a good vehicle for adding constraints that are not built into some 
 graphical object, since there is no way to view and manipulate these 
-“invisible” constraints. The demo classes are examples of how to 
+‚Äúinvisible‚Äù constraints. The demo classes are examples of how to 
 construct things using programs.
 
 Adding Primitive Things
@@ -418,8 +418,8 @@ set:to:strength: message. For example, one could write:
 
 	p set: #x to: 15 strength: #preferred
 
-This statement can be read: “I would prefer that the x part of point p 
-be 15 now.” It is implemented by adding an edit constraint with a 
+This statement can be read: ‚ÄúI would prefer that the x part of point p 
+be 15 now.‚Äù It is implemented by adding an edit constraint with a 
 strength of preferred to the x part of p and invoking the planner. If 
 the planner finds a way to satisfy the edit constraint, then the value 
 of x is changed and the plan is executed; otherwise, the value of x is 
@@ -436,7 +436,7 @@ ThingLab II UI.
 
 The mechanisms just described are clearly not as easy to use as one 
 would like and should be thought of as work in progress. Many of 
-the issues raised will be addressed in Bjorn Freeman-Benson’s thesis 
+the issues raised will be addressed in Bjorn Freeman-Benson‚Äôs thesis 
 on constraint-imperative programming.
 
 4. The User Interface
@@ -477,7 +477,7 @@ Parts Bins
 
 Primitive and previously constructed things are kept in a set of 
 hierarchically nested, iconic parts bins. The root of the hierarchy is 
-called “Top Bin”. A special bin called “All Parts” contains icons for all 
+called ‚ÄúTop Bin‚Äù. A special bin called ‚ÄúAll Parts‚Äù contains icons for all 
 primitive and constructed things in the system and is the only parts 
 bin from which a thing may be deleted from the system. The user may 
 construct additional parts bins to organize his set of things as 
