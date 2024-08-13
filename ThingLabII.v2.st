@@ -708,7 +708,7 @@ Object subclass: #GraphLayout
 placeVerticesAroundCircle
 	"Place vertices evenly spaced around a circle."
 
-	| deltaTheta theta v |
+	| deltaTheta theta |
 	deltaTheta _ (Float pi * 2.0) / vertexCount asFloat.
 	theta _ Float pi / 2.0.
 	vertices do:
@@ -734,7 +734,7 @@ setupConstants
 	1 to: (vertexCount - 1) do:
 		[: i |
 		(i+1) to: vertexCount do:
-			[: j |
+			[: j || dist |
 			 dist _ distances row: i col: j.
 			 idealLength _ (arcLength * dist) asFloat.
 			 springConst _ 0.30 / (dist * dist) asFloat.	"unstable if const >> 0.35"
@@ -758,7 +758,7 @@ computeForces
 
 	| i j lengthsRow springConstantsRow vectorX vectorY dist idealLength magnitude forceX forceY totalForce |
 
-	forces _ (1 to: vertexCount) collect: [: i | 0.0@0.0].
+	forces _ (1 to: vertexCount) collect: [: ii | 0.0@0.0].
 	i _ 1.
 	[i < vertexCount] whileTrue:
 		[lengthsRow _ lengths row: i.
@@ -1228,7 +1228,7 @@ findAllSolutions
 
 graphLayoutTool
 
-	| vertices transitions constraintVars n i j |
+	| vertices transitions constraintVars n j |
 	vertices _ IdentitySet new: 40.
 	constraintRecords do:
 		[: cRec | vertices addAll: cRec varGlyphs].
@@ -1243,7 +1243,7 @@ graphLayoutTool
 		 constraintVars _ cRec varGlyphs.
 		 n _ constraintVars size.
 		 1 to: (n - 1) do:
-			[: v1 |
+			[: v1 || i |
 			 i _ (constraintVars at: v1) label.
 			 (v1 + 1) to: n do:
 				[: v2 |
@@ -1537,12 +1537,11 @@ computeSolutions
 declareExternalVars: externalRefs
 	"Build the variable table and identify the external variables."
 
-	| ref |
 	self buildVariableTable.
 	varTable do:
 		[: entry |
 		 ref _ externalRefs
-			detect: [: ref | ref thingData == entry thingData]
+			detect: [: reff | reff thingData == entry thingData]
 			ifNone: [nil].
 		 (ref notNil) ifTrue:
 			[entry makeExternal: ref]].!
@@ -3147,7 +3146,7 @@ scrollOffsetLimits
 computeEnclosingRectangle
 	"Compute a rectangle capable of enclosing all glyphs in this view. The rectangle's corners are computed and then expanded to allow room for a border. This method should be called any time glyphs are added, removed or moved."
 
-	| min max g b |
+	| min max b |
 	min _ 6@6.
 	max _ 6@6.
 	model allGlyphs do:
@@ -3262,7 +3261,7 @@ That is, there must be a method header followed by a series of statements."
 	| meth |
 	failBlock _ [].
 	self init: sourceStream notifying: nil failBlock: failBlock.
-	encoder _ EquationEncoder new init: Object context: nil notifying: self.
+	encoder _ EquationEncoder new init: Object notifying: self.
 	meth _ self method: false context: nil.
 	"break cycles & mitigate refct overflow"
 	failBlock _ parseNode _ nil.
@@ -3279,7 +3278,7 @@ That is, there must be a method header followed by a series of statements."
 	| meth |
 	failBlock _ [self error: 'Module Compiler Error'].
 	self init: sourceStream notifying: nil failBlock: failBlock.
-	encoder _ EquationEncoder new init: aClass context: nil notifying: self.
+	encoder _ EquationEncoder new init: aClass notifying: self.
 	meth _ self method: false context: nil.
 	"break cycles & mitigate refct overflow"
 	failBlock _ parseNode _ nil.
@@ -3652,14 +3651,14 @@ on: aThing
 plan
 	"Figure out how to satisfy the constraints and answer a Plan."
 
-	| currentMark constraintCount plan nextC c m |
+	| currentMark constraintCount plan nextC m |
 	sortedConstraints do: [: c | c prepareForPlanning].
 	currentMark _ Time millisecondClockValue.
 	constraintCount _ sortedConstraints size.
 	plan _ Plan new: constraintCount * 2.
 	nextC _ 1.
 	[nextC <= constraintCount] whileTrue:
-		[c _ sortedConstraints at: nextC.
+		[| c | c _ sortedConstraints at: nextC.
 		 m _ c attemptSatisfaction: currentMark.
 		 (m notNil)
 			ifTrue:
@@ -4720,7 +4719,7 @@ allThingDatasInto: aSet
 cleanUpThingDataFor: partName 
 	"Remove the ThingData for this part of me if and only if it is no longer used by any constraint. This is complicated if the part is merged because there may be pointers to its ThingData in the thingData Dictionaries of its other parents."
 
-	| thingData part nameInParent |
+	| thingData part |
 	thingData _ self thingDataFor: partName.
 	(thingData isNil or: [thingData constraints size > 0]) ifTrue:
 		[^self].	"thingData is already gone or is still in use"
@@ -5026,11 +5025,11 @@ externalConstraintsFor: aThing
 	ownedConstraints _ IdentitySet new.
 	allConstraints _ IdentitySet new.
 	aThing allThingsDo:
-		[: aThing |
-		 ownedConstraints addAll: aThing constraints.
-		 aThing thingDatas do:
-			[: thingData |
-			 allConstraints addAll: thingData constraints]].
+		[: otherThing |
+		 ownedConstraints addAll: otherThing constraints.
+		 otherThing thingDatas do:
+			[: thingDataa |
+			 allConstraints addAll: thingDataa constraints]].
 
 	"add top-level constraints to allConstraints"
 	thingData _ aThing thingDataForYourself.
@@ -5191,8 +5190,8 @@ removeConstraintsForPart: partName
 		[part allThingsDo:
 			[: subPart |
 			 subPart thingDatas do:
-				[: thingData |
-				 allConstraints addAll: thingData constraints]]].
+				[: thingDataa |
+				 allConstraints addAll: thingDataa constraints]]].
 
 	"remove the collected constraints"
 	allConstraints do:
@@ -5710,11 +5709,11 @@ extractPlanFromChangingThingDatas: thingDatas
 	     marks on all constraints as they are added to the plan.
 	  2. Filter out duplicate constraints by using marks."
 
-	| plan todo i td c filteredPlan |
+	| plan todo filteredPlan |
 	plan _ Plan new: 1000.
 	todo _ OrderedCollection new: 1000.
 	thingDatas do:
-		[: td |
+		[: td || c |
 		 todo add: td.
 		 c _ td determinedBy.
 		 (c notNil) ifTrue:
@@ -5723,7 +5722,7 @@ extractPlanFromChangingThingDatas: thingDatas
 				 c clearCommitted]]].
 
 	[todo isEmpty] whileFalse:
-		[td _ todo removeFirst.
+		[ | td | td _ todo removeFirst.
 		 td usedBy do:
 			[: c |
 			 (c shouldUseGiven: true) ifTrue:
@@ -5939,7 +5938,7 @@ propagateFrom: vars watchFor: cycleVars execFlag: execFlag
 removePropagateFrom: vars unsatisfiedInto: hotConstraints multiOutsInto: multiOuts
 	"Recompute the walkabout strengths and stay flags of all variables downstream of the given set of variables, collecting all unsatisfied downstream constraints into hotConstraints and all multiple output constraints into multiOuts."
 
-	| todo var |
+	| todo |
 	todo _ OrderedCollection new: 100.
 	vars do:
 		[: var |
@@ -5948,7 +5947,7 @@ removePropagateFrom: vars unsatisfiedInto: hotConstraints multiOutsInto: multiOu
 		 todo add: var].
 
 	[todo isEmpty] whileFalse:
-		[var _ todo removeFirst.
+		[| var | var _ todo removeFirst.
 		 var constraints do:
 			[: c |
 			 (c isSatisfied) ifFalse:
@@ -6071,15 +6070,15 @@ varGlyphs: aCollectionOfVariableGlyphs
 centerConstraint: graphCenter
 	"Place my constraint glyph at the center of its operands. If the constraint has only one operand, place it on the side of the operand farthest from the center of the graph."
 
-	| sum outVec |
+	| outVec |
 	(varGlyphs size = 1)
 		ifTrue:
 			[outVec _ ((varGlyphs at: 1) location - graphCenter) unitVector.
 			 glyph location: varGlyphs first location + (outVec * 35.0) rounded]
 		ifFalse:
-			 [sum _ varGlyphs
+			 [| sum | sum _ varGlyphs
 						inject: 0@0
-						into: [: sum : varGlyph | sum + varGlyph location].
+						into: [: summ : varGlyph | summ + varGlyph location].
 			 glyph location: sum // varGlyphs size].!
 
 updateCurrentSolution
@@ -10057,11 +10056,11 @@ ref: ref1 ref: ref2 strength: aSymbol
 		[SharedMethods _ Array
 			with: ((Method new)
 				codeString: 'a _ b';
-				block: [: vars | (vars at: 1) value: (vars at: 2) value. vars _ nil];
+				block: [: vars | (vars at: 1) value: (vars at: 2) value.];
 				bindings: 'oi')
 			with: ((Method new)
 				codeString: 'b _ a';
-				block: [: vars | (vars at: 2) value: (vars at: 1) value. vars _ nil];
+				block: [: vars | (vars at: 2) value: (vars at: 1) value.];
 				bindings: 'io')].
 	self methods: SharedMethods.
 	whichMethod _ nil.
@@ -10683,8 +10682,7 @@ ref: ref strength: aSymbol offset: aNumber
 			codeString: '"mouseY"';
 			block:
 				[: vars |
-				 (vars at: 1) value: (Sensor mousePoint y + yOffset).
-				 vars _ nil];
+				 (vars at: 1) value: (Sensor mousePoint y + yOffset).];
 			bindings: 'o')).
 	whichMethod _ nil.
 	self initializeFlags.
@@ -10736,8 +10734,7 @@ ref: ref strength: aSymbol offset: aNumber
 			codeString: '"mouseX"';
 			block:
 				[: vars |
-				 (vars at: 1) value: (Sensor mousePoint x + xOffset).
-				 vars _ nil];
+				 (vars at: 1) value: (Sensor mousePoint x + xOffset).];
 			bindings: 'o')).
 	whichMethod _ nil.
 	self initializeFlags.
@@ -11522,7 +11519,7 @@ initializePrototype
 	clone _ tempThing clonePass1: cloneDictionary.
 	"move the newly copied external parts to their new home"
 	newThing class partNamesAndIndices do:
-		[: partAndIndex |
+		[: partAndIndex || part |
 		 partName _ partAndIndex at: 1.
 		 index _ partAndIndex at: 2.
 		 part _ clone perform: partName.
@@ -11606,7 +11603,7 @@ ref: ref strength: aSymbol
 		[SharedMethods _ Array with:
 			((Method new)
 				codeString: '"edit"';
-				block: [: vars | "I do nothing" vars _ nil];
+				block: [: vars | "I do nothing"];
 				bindings: 'o')].
 	self methods: SharedMethods.
 	whichMethod _ nil.
@@ -11931,7 +11928,7 @@ ref: ref strength: aSymbol
 		[SharedMethods _ Array with:
 			((Method new)
 				codeString: '"stay"';
-				block: [: vars | "I do nothing" vars _ nil];
+				block: [: vars | "I do nothing"];
 				bindings: 'o')].
 	self methods: SharedMethods.
 	whichMethod _ nil.
@@ -13039,7 +13036,7 @@ executeAndRedisplay
 makePlan
 	"Plan for constraint satisfaction and redisplay. This includes making a constraint satisfaction plan, computing the model's fixed glyphs, and computing the background form for redisplay."
 
-	| allThingDatas c |
+	| allThingDatas |
 	allThingDatas _ model thingDatas copy.
 	editConstraints do:
 		[: c |
