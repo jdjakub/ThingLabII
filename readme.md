@@ -3,12 +3,12 @@ Original readme:
 ```
 The second release of ThingLab II consists of the following files:
 
-	README			        -- this file
-	ThingLabII.v2.st	    -- Smalltalk code for the basic system
-	Things.v2.st		    -- Smalltalk code for the Primitive Things
-	Demos.v2.st		        -- Smalltalk code for a set of Demos (optional)
-	ThingLabII.form		    -- startup picture (optional)
-	ThingManual.text	    -- the manual, in plain text form
+	README			-- this file
+	ThingLabII.v2.st	-- Smalltalk code for the basic system
+	Things.v2.st		-- Smalltalk code for the Primitive Things
+	Demos.v2.st		-- Smalltalk code for a set of Demos (optional)
+	ThingLabII.form		-- startup picture (optional)
+	ThingManual.text	-- the manual, in plain text form
 	ThingManual.word3.02	-- the manual, in Word 3.02 form
 
 Please see the manual for installation directions. You'll need ParcPlace
