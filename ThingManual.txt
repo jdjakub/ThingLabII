@@ -150,8 +150,8 @@ the centers and corners of several instances of the resulting
 CenterRectangle may be combined with additional vertical and 
 horizontal constraints to produce a set of aligned boxes for a 
 diagram or a paned-window layout. Note that many of the 
-intermediate stages in this construction Ñ Quadrilaterals, 
-Rectangles, and CenterRectangles Ñ are re-usable objects in their 
+intermediate stages in this construction — Quadrilaterals, 
+Rectangles, and CenterRectangles — are re-usable objects in their 
 own right.
 
 Symbolic Strengths
