@@ -3261,7 +3261,9 @@ That is, there must be a method header followed by a series of statements."
 	| meth |
 	failBlock _ [].
 	self init: sourceStream notifying: nil failBlock: failBlock.
-	encoder _ EquationEncoder new init: Object notifying: self.
+	cue _ CompilationCue new initializeWithSource: stream context: nil
+        receiver: Object class: Object environment: (Environment new initialize) requestor: nil.
+	encoder _ EquationEncoder new init: cue notifying: self.
 	meth _ self method: false context: nil.
 	"break cycles & mitigate refct overflow"
 	failBlock _ parseNode _ nil.
@@ -3278,7 +3280,9 @@ That is, there must be a method header followed by a series of statements."
 	| meth |
 	failBlock _ [self error: 'Module Compiler Error'].
 	self init: sourceStream notifying: nil failBlock: failBlock.
-	encoder _ EquationEncoder new init: aClass notifying: self.
+	cue _ CompilationCue new initializeWithSource: stream context: nil
+        receiver: Object class: aClass environment: (Environment new initialize) requestor: nil.
+	encoder _ EquationEncoder new init: cue notifying: self.
 	meth _ self method: false context: nil.
 	"break cycles & mitigate refct overflow"
 	failBlock _ parseNode _ nil.
@@ -6483,6 +6487,10 @@ Encoder subclass: #EquationEncoder
 	poolDictionaries: ''
 	category: 'ThingLabII-Equations'!
 
+!EquationEncoder methodsFor: 'squeak compat'!
+
+supportsFullBlocks
+	^false! !
 
 !EquationEncoder methodsFor: 'encoding'!
 
