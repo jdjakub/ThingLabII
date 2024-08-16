@@ -605,7 +605,7 @@ referenced
 	vars _ IdentitySet new.
 	self apply:
 		[: node |
-		 (node isMemberOf: VariableNode)
+		 (node isKindOf: VariableNode)
 			ifTrue: [vars add: node name asSymbol. true]
 			ifFalse:
 				[(node isMemberOf: AssignmentNode)
@@ -15012,6 +15012,24 @@ selectAreaAt: aPoint toggleFlag: toggleFlag
 
 	"Initialize the ScreenController yellow button menu:"!
 	ScreenController initialize!
-	ScreenController allInstancesDo: [: c | c initializeYellowButtonMenu]!
+	"ScreenController allInstancesDo: [: c | c initializeYellowButtonMenu]"!
 
 "Th-th-that's all, Folks..."!
+
+!DisplayMedium methodsFor: 'ThingLab compatibility'!
+
+black: aRectangle 
+	self fillBlack: aRectangle.!
+
+black
+	self fillBlack.! !
+
+!Form class methodsFor: 'ThingLab compatibility'!
+
+black
+    ^(Form extent: 100@100) black.! !
+
+!Point methodsFor: 'ThingLab compatibility'!
+
+unitVector
+    ^self normalized.! !
