@@ -48,8 +48,10 @@ Errors so far:
 - Encoder class used to understand `init:context:notifying:` but some API change got rid of `context:`. Code was always passing `nil` anyway so I just removed the param.
 - Equations use the Smalltalk compiler classes to obtain a syntax tree. Encoder expects `init: aCue` where `aCue` is a `CompilationCue` holding context for compiling Smalltalk code. ThingLab code calls `init: Object notifying: self`, i.e. just passes class `Object` as the cue ... which doesNotUnderstand the various `CompilationCue` methods. I'm guessing they just wanted a dummy cue, so now I create one, with a dummy environment to handle "undeclared" messages.
 - Squeak Blocks now send a supportsFullBlocks message, this has been added to EquationEncoder.
+- ThingLab defines its own `CustomMenu` class, or perhaps tries to redefine/extend one in its 1989 environment. Squeak already has a `CustomMenu` class with more / different stuff, which clashes and causes critical menu failures which prevents debugging. Renamed this to `ThingLabCustomMenu`.
+- ThingLab defines its own `drawFrom:to:`/`privateDrawFrom:to:` in `BitBlt`, which seems to work OK in an MVC project but utterly breaks the parent Morphic project. Renamed to `thingLabDrawFrom`, etc.
 
-Current error: the very last line of ThingLabII.v2.st calls `initializeYellowButtonMenu` on all instances of ScreenController, but one or more doesNotUnderstand. Next round of errors seem to be about interfacing with ST80 MVC stuff as it exists in Squeak 6.0. Hurrah. Problem: Squeak lacks ST80 MVC classes like SwitchView, IconView etc. as can be attested in old manuals in google search results.
+Current error: the very last line of ThingLabII.v2.st calls `initializeYellowButtonMenu` on all instances of ScreenController, but one or more doesNotUnderstand. Next round of errors seem to be about interfacing with ST80 MVC stuff as it exists in Squeak 6.0. Hurrah. Problem: Squeak lacks ST80 MVC classes like `SwitchView`, `IconView` etc. as can be attested in old manuals in google search results.
 
 For now, we can ignore the UI errors, and the fact that all text is centered(???) and attempt to fileIn the Things library in the workspace:
 
@@ -58,3 +60,5 @@ For now, we can ignore the UI errors, and the fact that all text is centered(???
 ```
 
 This then breaks on a ThingLab path-symbol containing a period: like `#point.x`. Thus, I adapted the ThingLab1 Squeak method-name parser for 3.8 to 6.0 (parser-newer.st, diff from parser-old/new). After manually patching the Squeak image with those changes, fileIn catches more interesting errors, which seem to be a redux of the variable-shadowing ones from earlier.
+
+Current error: Rectangle constraints are compiling but not binding vars properly, because the visitor-pattern thingy traversing syntax trees isn't returning referenced variables properly. Fixing this.

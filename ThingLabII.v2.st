@@ -43,7 +43,7 @@ path
 
 !BitBlt methodsFor: 'ThingLabII'!
 
-drawFrom: p1 to: p2
+thingLabDrawFrom: p1 to: p2
 	"This line drawing method was improved by John Maloney to do more intelligent clipping. If the line (p1,p2) is entirely INSIDE the clipping box, this method gives results that are identical to the original line drawing method. If the line is entirely OUTSIDE the clipping box, it detects this early and avoids the cost of drawing it. Finally, if the line is PARTIALLY inside the clipping box, the portion entirely inside the clipping box computed and can be drawn by the primitive. If the pen form is large, you may notice a slight difference from the results given by the normal drawFrom:to: method on the right/bottom of the clipping box."
 
 	| offset startPoint endPoint clipOrigin clipCorner clippedLine |
@@ -69,11 +69,11 @@ drawFrom: p1 to: p2
 	(clippedLine first)
 		ifTrue:
 			["draw the visible part of the line"
-			 self privateDrawFrom: (clippedLine at: 2) to: (clippedLine at: 3)]
+			 self privateThingLabDrawFrom: (clippedLine at: 2) to: (clippedLine at: 3)]
 		ifFalse:
 			["the line is entirely outside the clipping region"].!
 
-privateDrawFrom: p1 to: p2
+privateThingLabDrawFrom: p1 to: p2
 	"Added by John Maloney for faster line drawing."
 
 	destX _ p1 x rounded.
@@ -1800,7 +1800,7 @@ Collection subclass: #PriorityQueue
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ThingLabII-UI-Layout'!
-
+	
 
 !PriorityQueue methodsFor: 'public'!
 
@@ -7664,8 +7664,8 @@ strengthsFor: aMethod
 	"Answer the walkabout strengths to be assigned to the outputs of the given method. The walkabout strength is the strength required to override the weakest upstream constraint determining the value of a given variable. The computation is complicated by the fact that some of my methods may not have inverses."
 
 	| outStrengths bindings i outStrength strongestOutOfInverse |
-	outStrengths _ OrderedCollection new: bindings size * 2.
 	bindings _ aMethod bindings.
+	outStrengths _ OrderedCollection new: bindings size * 2.
 	i _ bindings size.
 	[i > 0] whileTrue:
 		[((bindings at: i) == $o) ifTrue:
@@ -8316,7 +8316,7 @@ blockPostfixForOuts: outNames allNames: allNames
 	allNames do:
 		[: name |
 		 stream tab; nextPutAll: name, ' _ nil.'; cr].
-	stream tab; nextPutAll: 'vars _ nil]'; cr.
+	stream tab; nextPutAll: ']'; cr.
 
 	^stream contents!
 
@@ -8327,7 +8327,7 @@ blockPrefixForIns: inNames temps: tempNames args: argNames
 	stream _ WriteStream on: (String new).
 
 	"build the expression prefix, making all the variables look like temps"
-	stream nextPutAll: '| vars '.
+	stream nextPutAll: '| '.
 	argNames do: [: v | stream nextPutAll: v; space].
 	tempNames do: [: v | stream nextPutAll: v; space].
 	stream nextPutAll: '|'; cr.
@@ -9170,12 +9170,14 @@ execute: refList
 		ifTrue: [(refList at: 2) value: ((refList at: 1) value + offset)]
 		ifFalse: [(refList at: 1) value: ((refList at: 2) value - offset)].! !
 
-ActionMenu subclass: #CustomMenu
+
+ActionMenu subclass: #ThingLabCustomMenu
 	instanceVariableNames: 'items lastLine '
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ThingLabII-UI-Framework'!
-CustomMenu comment:
+
+ThingLabCustomMenu comment:
 'I am used to build menus on-the-fly. I maintain lists of menu items, actions (usually symbols to be sent as messages), and menu section dividing lines to which my clients may append new entries and lines by sending me the messages:
 
 	add: aString action: anAction
@@ -9194,7 +9196,7 @@ I am a subclass of ActionMenu, so I inherit a number of instance variables. The 
 	lastLine _ used to keep track of the last line to avoid making duplicate entries in lineArray'!
 
 
-!CustomMenu methodsFor: 'initialize-release'!
+!ThingLabCustomMenu methodsFor: 'initialize-release'!
 
 initialize
 
@@ -9203,7 +9205,7 @@ initialize
 	lineArray _ OrderedCollection new.
 	lastLine _ 0.! !
 
-!CustomMenu methodsFor: 'construction'!
+!ThingLabCustomMenu methodsFor: 'construction'!
 
 add: aString action: aSymbol
 	"Add the given string as the next menu item. If it is selected, the given action (usually but not necessarily a symbol) will be returned to the client."
@@ -9219,7 +9221,7 @@ addLine
 			[lastLine _ items size.
 			 lineArray addLast: lastLine].! !
 
-!CustomMenu methodsFor: 'invocation'!
+!ThingLabCustomMenu methodsFor: 'invocation'!
 
 invoke
 	"Invoke the menu with no initial selection."
@@ -9238,7 +9240,7 @@ invoke: initialSelection
 		ifTrue: [^nil]
 		ifFalse: [^selectors at: itemIndex].! !
 
-!CustomMenu methodsFor: 'private'!
+!ThingLabCustomMenu methodsFor: 'private'!
 
 build
 	"Turn myself into an invokable ActionMenu."
@@ -9262,23 +9264,23 @@ preSelect: action
 	selection _ i.! !
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-CustomMenu class
+ThingLabCustomMenu class
 	instanceVariableNames: ''!
 
 
-!CustomMenu class methodsFor: 'instance creation'!
+!ThingLabCustomMenu class methodsFor: 'instance creation'!
 
 new
 
 	^(super new) initialize! !
 
-!CustomMenu class methodsFor: 'example'!
+!ThingLabCustomMenu class methodsFor: 'example'!
 
 example
-	"CustomMenu example"
+	"ThingLabCustomMenu example"
 
 	| menu |
-	menu _ CustomMenu new.
+	menu _ ThingLabCustomMenu new.
 	menu add: 'apples' action: #apples.
 	menu add: 'oranges' action: #oranges.
 	menu add: 'peaches' action: #peaches.
@@ -10325,7 +10327,7 @@ SceneController comment:
 initialize
 
 	super initialize.
-	myMenu _ CustomMenu new.
+	myMenu _ ThingLabCustomMenu new.
 	lastMenuItem _ nil.
 	doneFlag _ false.! !
 
@@ -10440,9 +10442,9 @@ menuActivity
 	(item notNil) ifTrue: [self perform: item].!
 
 yellowButtonMenu: debugging
-	"Answer my yellow-button menu, constructed by sending myself the message 'addMenuItems: debugging.' Items are appended to the CustomMenu myMenu; this allows subclasses to augment the menu provided  by their superclass without the maintainance headache of copying the menu creation code into the subclass."
+	"Answer my yellow-button menu, constructed by sending myself the message 'addMenuItems: debugging.' Items are appended to the ThingLabCustomMenu myMenu; this allows subclasses to augment the menu provided  by their superclass without the maintainance headache of copying the menu creation code into the subclass."
 
-	myMenu _ CustomMenu new.
+	myMenu _ ThingLabCustomMenu new.
 	self addMenuItems: debugging.
 	^myMenu! !
 
@@ -10954,11 +10956,9 @@ open
 	| panelRect controller topView |
 	panelRect _ 0@0 extent: 235@135.
 	controller _ (SpecialSystemController new) fromHolder: self.
-	topView _ SpecialSystemView
-		model: nil
-		label: 'ThingLabII Control Panel'
-		minimumSize: panelRect extent.
-	topView
+	topView _ SpecialSystemView new.
+	topView label: 'ThingLabII Control Panel';
+		minimumSize: panelRect extent;
 		maximumSize: panelRect extent;
 		window: panelRect viewport: panelRect;
 		controller: controller.
@@ -11275,11 +11275,11 @@ label: aString big: bigFlag
 			[bigFlag
 				ifTrue:
 					[style _ TextStyle fontArray: (Array with:
-						((TextStyle styleNamed: #default) fontAt: 1)).
+						((TextStyle default copy) fontAt: 1)).
 					 style baseline: 11; lineGrid: 17]
 				ifFalse:
 					[style _ TextStyle fontArray: (Array with:
-						((TextStyle styleNamed: #small) fontAt: 1)).
+						((TextStyle named: #small copy) fontAt: 1)).
 			 		 style baseline: 9; lineGrid: 13].
 			 labelText _ Paragraph withText: aString asText style: style.
 			 labelFrame region:
@@ -13348,7 +13348,7 @@ updateNameForm
 	nameForm _
 		(Paragraph
 			withText: self name asText
-			style: ((TextStyle default) lineGrid: 12; baseline: 9)) centered asForm.! !
+			style: ((TextStyle default copy) lineGrid: 12; baseline: 9)) centered asForm.! !
 
 !IconGlyph methodsFor: 'glyph protocol'!
 
@@ -13995,7 +13995,7 @@ name: aString
 	nameForm _
 		(Paragraph
 			withText: self name asText
-			style: ((TextStyle default) lineGrid: 12; baseline: 9)) centered asForm.
+			style: ((TextStyle default copy) lineGrid: 12; baseline: 9)) centered asForm.
 	nameForm offset: (nameForm computeBoundingBox extent // -2).! !
 
 !ConstraintGlyph methodsFor: 'show/hide label'!
@@ -14560,7 +14560,7 @@ name: aString
 	nameForm _
 		(Paragraph
 			withText: self name asText
-			style: ((TextStyle default) lineGrid: 12; baseline: 9)) centered asForm.
+			style: ((TextStyle default copy) lineGrid: 12; baseline: 9)) centered asForm.
 	nameForm offset: (nameForm computeBoundingBox extent // -2).! !
 
 !VariableGlyph methodsFor: 'show/hide label'!
