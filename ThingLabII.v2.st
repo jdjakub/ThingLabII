@@ -3067,7 +3067,7 @@ displayBorderOn: aDisplayMedium at: aPoint clippingBox: clipBox
 	aDisplayMedium
 		border: borderBox
 		widthRectangle: (1@1 corner: 1@1)
-		mask: (Form gray)
+		fillColor: (Color gray)
 		clippingBox: clipBox.
 
 	"display cross hairs at origin"
@@ -3094,7 +3094,7 @@ displayFeedbackWithBox: aRectangle width: w
 		[scratchForm
 			border: (aRectangle translateBy: viewOrigin)
 			widthRectangle: (w@w corner: w@w)
-			mask: (Form black)
+			fillColor: (Color black)
 			clippingBox: clipBox].
 	scratchForm
 		displayOn: Display
@@ -3200,9 +3200,10 @@ openWithSubview: aView label: labelString
 	"Open a StandardSystemView with the given label and the given view as a subview."
 
 	| topView |
-	topView _ SpecialSystemView
-		model: nil
-		label: labelString
+	topView _ SpecialSystemView new.
+	topView
+		model: nil;
+		label: labelString;
 		minimumSize: 60@60.
 	topView
 		borderWidth: 1;
@@ -3217,9 +3218,10 @@ openWithSubview: aView label: labelString fromHolder: aPartHolder zoomFrom: from
 	controller
 		fromHolder: aPartHolder;
 		fromFrame: fromRect.
-	topView _ SpecialSystemView
-		model: nil
-		label: labelString
+	topView _ SpecialSystemView new.
+	topView
+		model: nil;
+		label: labelString;
 		minimumSize: 60@60.
 	topView
 		borderWidth: 1;
@@ -3391,7 +3393,7 @@ newOn: aForm box: aRectangle
 	textStyle _ TextStyle default.
 	font _ textStyle fontAt: 1.
 	destForm _ aForm.
-	halftoneForm _ Form black.
+	halftoneForm _ Color black.
 	combinationRule _ Form over.
 	self clipRect: aRectangle.
 	sourceY _ 0.
@@ -4559,7 +4561,7 @@ highlightOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		border: ((self boundingBox translateBy: aDisplayPoint)
 					insetOriginBy: -2 cornerBy: -2)
 		widthRectangle: (1@1 corner: 1@1)
-		mask: (Form black)
+		fillColor: (Color black)
 		clippingBox: clipBox.!
 
 intersects: aRectOrThing
@@ -6539,7 +6541,7 @@ displayView
 			at: ((loc at: 2)@(loc at: 3))
 			clippingBox: (tempForm boundingBox)
 			rule: (Form paint)
-			mask: (Form perform: color)].
+			fillColor: (Form perform: color)].
 	tempForm displayOn: Display at: displayBox topLeft.! !
 
 !ModuleCompilerView methodsFor: 'termination'!
@@ -10285,7 +10287,7 @@ computeBackground
 		 glyph
 			displayOn: backgroundForm
 			at: viewOrigin clippingBox: clipBox].
-	backgroundForm fill: clipBox rule: Form erase mask: Form gray.
+	backgroundForm fill: clipBox rule: Form erase fillColor: Color gray.
 
 	"draw the border and external glyphs"
 	self displayBorderOn: backgroundForm at: viewOrigin clippingBox: clipBox.
@@ -10470,7 +10472,7 @@ clearSelection
 scroll
 	"Wait for the mouse button to be pressed, then scroll."
 
-	Cursor hand showWhile: [sensor waitButton].
+	Cursor webLink showWhile: [sensor waitButton].
 	self scrollAt: sensor cursorPoint.!
 
 selectAll
@@ -10560,7 +10562,7 @@ scrollAt: aPoint
 
 	| limits relOffset hotRect ratio lastPoint newPoint |
 	limits _ view scrollOffsetLimits.
-	Cursor hand showWhile:
+	Cursor webLink showWhile:
 		[view computeBackground.
 		 relOffset _
 			(view scrollOffset * -40) / (limits extent max: (1@1)).
@@ -10692,7 +10694,7 @@ ref: ref strength: aSymbol offset: aNumber
 			codeString: '"mouseY"';
 			block:
 				[: vars |
-				 (vars at: 1) value: (Sensor mousePoint y + yOffset).];
+				 (vars at: 1) value: (Sensor cursorPoint y + yOffset).];
 			bindings: 'o')).
 	whichMethod _ nil.
 	self initializeFlags.
@@ -10744,7 +10746,7 @@ ref: ref strength: aSymbol offset: aNumber
 			codeString: '"mouseX"';
 			block:
 				[: vars |
-				 (vars at: 1) value: (Sensor mousePoint x + xOffset).];
+				 (vars at: 1) value: (Sensor cursorPoint x + xOffset).];
 			bindings: 'o')).
 	whichMethod _ nil.
 	self initializeFlags.
@@ -11309,23 +11311,23 @@ labelForm
 	rightEdge _ textPlace x + textBox width.
 
 	"left side fringe"
-	form fill: (0@0 corner: leftEdge@form height) mask: Form lightGray.
-	form fill: ((leftEdge@0) extent: 12@form height) mask: Form white.
-	form fill: ((leftEdge@0) extent: 4@form height) mask: Form black.
-	form fill: ((leftEdge + 6@0) extent: 2@form height) mask: Form black.
-	form fill: ((leftEdge + 11@0) extent: 1@form height) mask: Form black.
+	form fill: (0@0 corner: leftEdge@form height) fillColor: Color lightGray.
+	form fill: ((leftEdge@0) extent: 12@form height) fillColor: Color white.
+	form fill: ((leftEdge@0) extent: 4@form height) fillColor: Color black.
+	form fill: ((leftEdge + 6@0) extent: 2@form height) fillColor: Color black.
+	form fill: ((leftEdge + 11@0) extent: 1@form height) fillColor: Color black.
 
 	"right side fringe"
-	form fill: (rightEdge@0 corner: form extent) mask: Form lightGray.
-	form fill: ((rightEdge@0) extent: 12@form height) mask: Form white.
-	form fill: ((rightEdge@0) extent: 1@form height) mask: Form black.
-	form fill: ((rightEdge + 4@0) extent: 2@form height) mask: Form black.
-	form fill: ((rightEdge + 8@0) extent: 4@form height) mask: Form black.
+	form fill: (rightEdge@0 corner: form extent) fillColor: Color lightGray.
+	form fill: ((rightEdge@0) extent: 12@form height) fillColor: Color white.
+	form fill: ((rightEdge@0) extent: 1@form height) fillColor: Color black.
+	form fill: ((rightEdge + 4@0) extent: 2@form height) fillColor: Color black.
+	form fill: ((rightEdge + 8@0) extent: 4@form height) fillColor: Color black.
 
 	"draw the border over everything else"
 	form
 		border: form boundingBox
-		widthRectangle: ((1@1) corner: (1@0)) mask: (Form black).
+		widthRectangle: ((1@1) corner: (1@0)) rule: (Form over) fillColor: (Color black).
 	^form!
 
 labelTextBox
@@ -12039,7 +12041,7 @@ highlightOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		border: ((self boundingBox translateBy: aDisplayPoint)
 					insetOriginBy: -2@-2 cornerBy: -2@-2)
 		widthRectangle: (1@1 corner: 1@1)
-		mask: (Form black)
+		fillColor: (Color black)
 		clippingBox: clipBox.!
 
 intersects: aRectOrGlyph
@@ -13121,7 +13123,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		at: location + aDisplayPoint
 		clippingBox: clipBox
 		rule: (Form over)
-		mask: (Form black).! !
+		fillColor: (Color black).! !
 
 !ButtonGlyph methodsFor: 'mouse'!
 
@@ -13370,21 +13372,21 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		at: (aDisplayPoint + self iconOffset)
 		clippingBox: clipBox
 		rule: (Form over)
-		mask: (Form black).
+		fillColor: (Color black).
 
 	nameForm
 		displayOn: aDisplayMedium
 		at: (aDisplayPoint + self nameOffset)
 		clippingBox: clipBox
 		rule: (Form over)
-		mask: (Form black).!
+		fillColor: (Color black).!
 
 highlightOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 
 	aDisplayMedium
 		border: ((self iconBox translateBy: aDisplayPoint) expandBy: 1)
 		widthRectangle: (1@1 corner: 1@1)
-		mask: (Form gray)
+		fillColor: (Color gray)
 		clippingBox: clipBox.
 
 	nameForm
@@ -13392,7 +13394,7 @@ highlightOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		at: (aDisplayPoint + self nameOffset)
 		clippingBox: clipBox
 		rule: 12
-		mask: (Form black).! !
+		fillColor: (Color black).! !
 
 !IconGlyph methodsFor: 'private'!
 
@@ -13442,7 +13444,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		at: aDisplayPoint + location
 		clippingBox: clipBox
 		rule: Form paint
-		mask: Form black.!
+		fillColor: Color black.!
 
 form
 	"Answer the arrowhead form for my vector."
@@ -14037,7 +14039,7 @@ displayConnectionsOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 			at: aDisplayPoint
 			clippingBox: clipBox
 			rule: Form over
-			mask: Form black].
+			fillColor: Color black].
 	"draw gray lines to unused variables"
 	unusedVars do:
 		[: varGlyph |
@@ -14047,7 +14049,7 @@ displayConnectionsOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 			at: aDisplayPoint
 			clippingBox: clipBox
 			rule: Form over
-			mask: Form gray].
+			fillColor: Color gray].
 	"draw arrow heads to output variables"
 	outVars do:
 		[: varGlyph |
@@ -14070,7 +14072,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 			at: location + aDisplayPoint
 			clippingBox: clipBox
 			rule: (Form over)
-			mask: (Form black)].!
+			fillColor: (Color black)].!
 
 highlightOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 
@@ -14080,7 +14082,7 @@ highlightOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 			at: location + aDisplayPoint
 			clippingBox: clipBox
 			rule: 12	"reversed"
-			mask: (Form black)].! !
+			fillColor: (Color black)].! !
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 ConstraintGlyph class
@@ -14669,7 +14671,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		at: location + aDisplayPoint
 		clippingBox: clipBox
 		rule: (Form under)
-		mask: (Form black).
+		fillColor: (Color black).
 
 	showLabel ifTrue:
 		[nameForm
@@ -14677,7 +14679,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 			at: location + aDisplayPoint + (0@15)
 			clippingBox: clipBox
 			rule: (Form over)
-			mask: (Form black)].!
+			fillColor: (Color black)].!
 
 highlightOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 
@@ -14687,7 +14689,7 @@ highlightOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 	aDisplayMedium
 		border: (iconBox translateBy: location + aDisplayPoint + icon offset)
 		widthRectangle: (1@1 corner: 1@1)
-		mask: (Form gray)
+		fillColor: (Color gray)
 		clippingBox: clipBox.
 
 	showLabel ifTrue:
@@ -14696,7 +14698,7 @@ highlightOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 			at: location + aDisplayPoint + (0@15)
 			clippingBox: clipBox
 			rule: 12	"reversed"
-			mask: (Form black)].! !
+			fillColor: (Color black)].! !
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 VariableGlyph class
@@ -15018,16 +15020,26 @@ selectAreaAt: aPoint toggleFlag: toggleFlag
 
 !DisplayMedium methodsFor: 'ThingLab compatibility'!
 
+white: aRectangle 
+	self fillWhite: aRectangle.!
+
+white
+	self fillWhite.!
+
+lightGray: aRectangle 
+	self fillLightGray: aRectangle.!
+
+lightGray
+	self fillLightGray.!
+
+fillLightGray
+	self fill: self boundingBox fillColor: Color lightGray.!
+
 black: aRectangle 
 	self fillBlack: aRectangle.!
 
 black
 	self fillBlack.! !
-
-!Form class methodsFor: 'ThingLab compatibility'!
-
-black
-    ^(Form extent: 100@100) black.! !
 
 !Point methodsFor: 'ThingLab compatibility'!
 

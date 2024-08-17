@@ -64,7 +64,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		at: (aDisplayPoint + (x@y))
 		clippingBox: clipBox
 		rule: (Form paint)
-		mask: (Form black)!
+		fillColor: (Color black)!
 
 glyphDependsOn
 
@@ -182,7 +182,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 	(fillMask notNil) ifTrue:
 		[aDisplayMedium
 			fill: (self boundingBox insetOriginBy: 1@1 cornerBy: 1@1)
-			rule: fillRule mask: fillMask].!
+			rule: fillRule fillColor: fillMask].!
 
 glyphDependsOn
 
@@ -431,7 +431,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		at: (aDisplayPoint + point asPoint)
 		clippingBox: clipBox
 		rule: (Form paint)
-		mask: (Form black).!
+		fillColor: (Color black).!
 
 glyphDependsOn
 
@@ -554,12 +554,12 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		fill: ((myBox left - w)@(myBox top - w) extent:
 			 (w@(myBox height + (2 * w))))
 		rule: (Form over)
-		mask: (Form black).
+		fillColor: (Color black).
 	aDisplayMedium
 		fill: ((myBox right)@(myBox top - w) extent:
 			 (w@(myBox height + (2 * w))))
 		rule: (Form over)
-		mask: (Form black).
+		fillColor: (Color black).
 
 	aDisplayMedium
 		border:  ((myBox left - w)@(myBox top - 8) extent:
@@ -569,18 +569,18 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		fill: ((myBox left - w + 1)@(myBox top - 7) extent:
 			 ((myBox width - 2 + (2 * w))@6))
 		rule: (Form over)
-		mask: (Form lightGray).
+		fillColor: (Color lightGray).
 
 	aDisplayMedium
 		fill: ((myBox left - w)@(myBox top - w) extent:
 			 ((myBox width + (2 * w))@w))
 		rule: (Form over)
-		mask: (Form black).
+		fillColor: (Color black).
 	aDisplayMedium
 		fill: ((myBox left - w)@(myBox bottom) extent:
 			 ((myBox width + (2 * w))@w))
 		rule: (Form over)
-		mask: (Form black).!
+		fillColor: (Color black).!
 
 selectableGlyphsInto: aSet
 
@@ -783,7 +783,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 			at: aDisplayPoint
 			clippingBox: clipBox
 			rule: (Form paint)
-			mask: (Form black).!
+			fillColor: (Color black).!
 
 glyphDependsOn
 
@@ -1115,7 +1115,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		at: (aDisplayPoint + (location asPoint))
 		clippingBox: clipBox
 		rule: (Form paint)
-		mask: (Form black)!
+		fillColor: (Color black)!
 
 glyphDependsOn
 
@@ -1347,7 +1347,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		at: (aDisplayPoint + (node location asPoint))
 		clippingBox: clipBox
 		rule: (Form paint)
-		mask: (Form black).!
+		fillColor: (Color black).!
 
 glyphDependsOn
 
@@ -1563,13 +1563,13 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 			at: aDisplayPoint
 			clippingBox: clipBox
 			rule: (Form paint)
-			mask: (Form black)].
+			fillColor: (Color black)].
 	opForm
 		displayOn: aDisplayMedium
 		at: (aDisplayPoint + location asPoint)
 		clippingBox: clipBox
 		rule: (Form over)
-		mask: (Form black).!
+		fillColor: (Color black).!
 
 glyphDependsOn
 
@@ -2208,19 +2208,19 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 			at: aDisplayPoint
 			clippingBox: clipBox
 			rule: (Form paint)
-			mask: (Form black).
+			fillColor: (Color black).
 	form
 		displayOn: aDisplayMedium
 		at: (aDisplayPoint + (location asPoint) - (extent // 2))
 		clippingBox: clipBox
 		rule: (Form over)
-		mask: (Form black).
+		fillColor: (Color black).
 	self node value
 		displayOn: aDisplayMedium
 		at: ((aDisplayPoint + (location asPoint) - (extent // 2)) + (1@1))
 		clippingBox: clipBox
 		rule: (Form over)
-		mask: (Form black).!
+		fillColor: (Color black).!
 
 glyphDependsOn
 
@@ -2935,7 +2935,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		at: (aDisplayPoint + (node location asPoint))
 		clippingBox: clipBox
 		rule: (Form paint)
-		mask: (Form black).!
+		fillColor: (Color black).!
 
 glyphDependsOn
 
@@ -3306,7 +3306,7 @@ initializeConstraints
 	"ButtonThing initialize"
 
 	self methods: #(
-			'color _ (value = 0) ifTrue: [Form white] ifFalse: [Form black]')
+			'color _ (value = 0) ifTrue: [Color white] ifFalse: [Color black]')
 		where: #((color text.box.fillMask) (value node.value))
 		strength: #strongPreferred.
 
@@ -3869,13 +3869,13 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 			at: aDisplayPoint
 			clippingBox: clipBox
 			rule: (Form paint)
-			mask: (Form black)].
+			fillColor: (Color black)].
 	opForm
 		displayOn: aDisplayMedium
 		at: (aDisplayPoint + location asPoint)
 		clippingBox: clipBox
 		rule: (Form over)
-		mask: (Form black).!
+		fillColor: (Color black).!
 
 glyphDependsOn
 
@@ -4319,7 +4319,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		at: aDisplayPoint + location asPoint	
 		clippingBox: clipBox
 		rule: Form paint
-		mask: Form black.!
+		fillColor: Color black.!
 
 downForm
 
