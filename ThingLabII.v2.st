@@ -3329,7 +3329,7 @@ parse: aStream withEncoder: anEncoder
 
 	^(super new) parse: aStream withEncoder: anEncoder! !
 
-CharacterScanner subclass: #QuickPrint
+BitBltDisplayScanner subclass: #QuickPrint
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -3337,6 +3337,13 @@ CharacterScanner subclass: #QuickPrint
 QuickPrint comment:
 'This class supports fast character string display. It is significantly faster than using a Paragraph for the same purpose.'!
 
+!QuickPrint methodsFor: 'Squeak compatibility'!
+
+clipRect: aRect
+	bitBlt clipRect: aRect!
+
+clipRect
+	bitBlt clipRect! !
 
 !QuickPrint methodsFor: 'displaying'!
 
@@ -3364,7 +3371,7 @@ stringWidth: aString
 		in: aString
 		rightX: 10000	"virtual infinity"
 		stopConditions: stopConditions
-		displaying: false.
+		kern: 0.
 	^destX! !
 
 !QuickPrint methodsFor: 'positioning'!
@@ -3390,24 +3397,26 @@ rightBy: offset
 newOn: aForm box: aRectangle
 	"Initialize myself."
 
+	kern := 0.
+	bitBlt := BitBlt asGrafPort toForm: aForm.
 	textStyle _ TextStyle default.
 	font _ textStyle fontAt: 1.
 	destForm _ aForm.
 	halftoneForm _ Color black.
-	combinationRule _ Form over.
+	bitBlt combinationRule: Form over.
 	self clipRect: aRectangle.
-	sourceY _ 0.
+	bitBlt sourceY: 0.
 	"sourceX is set when selecting the character from the font strike bitmap"
 	self setStopConditions.!
 
 setStopConditions
 	"Set default stop conditions for the font."
 
-	spaceWidth _ font spaceWidth. 
-	sourceForm _ font glyphs.
+	spaceWidth _ font widthOf: Character space. 
+	bitBlt sourceForm: font glyphs.
 	xTable _ font xTable.
-	height _ font height.
-	stopConditions _ font stopConditions.
+	bitBlt height: font height.
+	stopConditions _ DefaultStopConditions copy.
 	stopConditions at: CR asInteger + 1 put: #cr.
 	stopConditions at: 10 + 1 put: #cr.
 	stopConditions at: EndOfRun put: #endOfRun.

@@ -263,3 +263,11 @@ border: aRectangle widthRectangle: insets fillColor: aHalfTone clippingBox: clip
 	Uses aHalfTone for drawing the border."
 	(aRectangle areasOutside: (aRectangle insetBy: insets)) do:
 		[:edgeStrip | self fill: (edgeStrip intersect: clipRect) fillColor: aHalfTone]! !
+
+!Form methodsFor: 'ThingLab compatibility'!
+shrinkBy: scale
+    self shrink: self boundingBox by: scale!
+    
+reflect: modePoint
+    modePoint = (0@1) ifTrue: [self flipBy: #vertical centerAt: 0@0]
+        ifFalse: [self flipBy: #horizontal centerAt: 0@0] !
