@@ -256,6 +256,48 @@ deEmphasizeView
 					fillColor: Color black.
 				Display fill: self insetDisplayBox rule: Form under fillColor: Color lightGray]! !
 
+PopUpMenu subclass: #ActionMenu
+	instanceVariableNames: 'selectors '
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Interface-Menus'!
+ActionMenu comment:
+'ActionMenus carry an array of selectors which correspond to the listed menu items.  This allows a menu to stand alone in parameterizing a controller, since the controller just sends the selector to its model.
+
+ActionMenus allow the pluggable views experiment (TextView, SelectionInListView) to
+handle menus much easier than having pairs of variables for the menu and its associated
+selectors.  Obviously these menus eagerly await a proper objectification of protocol.'!
+
+
+!ActionMenu methodsFor: 'action symbols'!
+selectorAt: index
+	^ selectors at: index!
+setSelectors: selArray
+	selectors _ selArray! !
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+ActionMenu class
+	instanceVariableNames: ''!
+ActionMenu class comment:
+'This subclass of PopUpMenu carries a list of selectors corresponding to the various menu items.
+Therefore, with only the menu as a parameter, a controller can display the menu and then
+tell its model to perform the associated selector.  This saves maintaining two parallel structures,
+one for the names in the menu, and one for the selectors to be performed.'!
+
+
+!ActionMenu class methodsFor: 'instance creation'!
+labels: aString lines: anArray selectors: selArray
+	| aMenu |
+	aMenu _ self labels: aString lines: anArray.
+	aMenu setSelectors: selArray.
+	^ aMenu!
+labels: aString selectors: selArray
+	^ self labels: aString lines: nil selectors: selArray! !
+
+!ActionMenu class methodsFor: 'confirmation'!
+confirm  "ActionMenu confirm"
+	^ (ActionMenu labels: 'confirm\abort' withCRs selectors: nil) startUp = 1! !
+
 !DisplayMedium methodsFor: 'ThingLab compatibility'!
 border: aRectangle widthRectangle: insets fillColor: aHalfTone clippingBox: clipRect
 	"Paint a border whose rectangular area is defined by aRectangle.  The width of
@@ -270,4 +312,11 @@ shrinkBy: scale
     
 reflect: modePoint
     modePoint = (0@1) ifTrue: [self flipBy: #vertical centerAt: 0@0]
-        ifFalse: [self flipBy: #horizontal centerAt: 0@0] !
+        ifFalse: [self flipBy: #horizontal centerAt: 0@0] ! !
+
+!PopUpMenu methodsFor: 'ThingLab compatibility'!
+
+reset
+	marker ifNil: [self computeForm].
+	marker _  marker align: marker topLeft with: frame topLeft + frame borderWidth.
+	selection _ 0.! !

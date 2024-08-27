@@ -36,16 +36,16 @@ I'm a recent (zealous) convert to Squeak after visiting HPI, so I'm not too know
 
 Instructions:
 - Squeak 6.0
+- Manually apply the patches in `1.parser-newer.st` (sorry)
 - Projects > Create MVC Project
 - Click on it to enter it
 - Left click world menu > Open > File list
-- Navigate to ThingLabII.v2.st
+- Navigate to 2.ST80-prereqs.st
 - Right click > fileIn entire file
-- Currently fixing the errors as they come and committing back to ThingLabII.v2.st
-- Navigate to ST80-extras.st, fileIn
+- Navigate to 3.ThingLabII.v2.st, fileIn
+- Currently fixing the errors as they come and committing back to 3.ThingLabII.v2.st
 - Now you can `ThingLabIIControlPanel open.`
-- Manually apply the patches in `parser-newer.st` (sorry)
-- Now you can fileIn Things.v2.st, proceed past constraint errors
+- Now you can fileIn 4.Things.v2.st, proceed past constraint errors
 - Now you can `PartsBinView openOn: PartsBin topBin.`
 - Currently fixing UI related errors from clicking things
 
@@ -64,6 +64,7 @@ Errors so far:
 - Squeak lacks ST80 MVC classes like `SwitchView`, `IconView` etc. as can be attested in old manuals in google search results ([ref1](http://stephane.ducasse.free.fr/FreeBooks/InsideST/InsideSmalltalkII.pdf), [ref2](https://www.lri.fr/~mbl/ENS/FONDIHM/2013/papers/Krasner-JOOP88.pdf)). Thanks to [Rochus Keller's work](https://github.com/rochus-keller/Smalltalk), I obtained the `Smalltalk-80.sources` and ported SwitchView/Controller to colour-screen MVC (ST80-extras.st)
 - ThingLab refers to a `Cursor hand` but it's not present even in the ST80 sources. Using `Cursor webLink` instead. API change `Sensor mousePoint` -> `Sensor cursorPoint`, fingers crossed this means the same thing.
 - ThingLab's `QuickPrint` subclasses `CharacterScanner`, which used to subclass `BitBlt`, whose methods and vars `QuickPrint` relies on. These days, `CharacterScanner` subclasses `Object`, and there is a concrete `BitBltDisplayScanner` containing a `BitBlt`. `QuickPrint` now subclasses `BitBltDisplayScanner` and delegates to its `bitBlt` where necessary.
+- `ThingLabCustomMenu` subclasses `ActionMenu`, not present in Squeak - so it ends up subclassing `ProtoObject` (???), which doesn't understand inspector protocols and sends you into a bottomless pit of debugging windows. Ported `ActionMenu` from ST80 sources.
 
 Abandoned error: the very last line of the original ThingLabII.v2.st calls `initializeYellowButtonMenu` on all instances of ScreenController, but one or more doesNotUnderstand. Next round of errors seem to be about interfacing with ST80 MVC stuff as it exists in Squeak 6.0. Hurrah.
 
