@@ -195,7 +195,7 @@ quit
 		lines: #(1 2).
 	index _ menu startUp.
 	(index = 1)
-		ifTrue: [self save: true].		"save, then quit"
+		ifTrue: ["self save: true"].		"save, then quit"
 	(index = 2)
 		ifTrue: [Smalltalk quit].		"quit without saving"
 
@@ -3037,8 +3037,8 @@ computeBackground
 
 	| viewExtent viewOrigin clipBox |
 	viewExtent _ self enclosingRectangle rounded extent max: self insetDisplayBox extent.
-	backgroundForm _ Form extent: viewExtent.
-	scratchForm _ Form extent: viewExtent.
+	backgroundForm _ Form extent: viewExtent depth: 32. backgroundForm fillWhite.
+	scratchForm _ Form extent: viewExtent depth: 32. scratchForm fillWhite.
 	viewOrigin _ self viewOrigin.
 	clipBox _ backgroundForm computeBoundingBox.
 	self displayBorderOn: backgroundForm at: viewOrigin clippingBox: clipBox.
@@ -3343,22 +3343,22 @@ clipRect: aRect
 	bitBlt clipRect: aRect!
 
 clipRect
-	bitBlt clipRect! !
+	^bitBlt clipRect! !
 
 !QuickPrint methodsFor: 'displaying'!
 
 drawString: aString
 	"Draw the given string."
 
-	destX _ clipX.
-	destY _ clipY.
+	destX _ bitBlt clipX.
+	destY _ bitBlt clipY.
 	self
 		scanCharactersFrom: 1
 		to: (aString size)
 		in: aString
-		rightX: (clipX + clipWidth)
+		rightX: (bitBlt clipX + bitBlt clipWidth)
 		stopConditions: stopConditions
-		displaying: true!
+		kern: 0!
 
 stringWidth: aString
 	"Answer the width of the given string."
@@ -6070,7 +6070,7 @@ solutions
 
 solutions: aCollectionOfMethods
 
-	solutions_ aCollectionOfMethods.!
+	solutions _ aCollectionOfMethods.!
 
 varGlyphs
 
@@ -6541,7 +6541,7 @@ displayView
 
 	| displayBox tempForm colors |
 	displayBox _ self insetDisplayBox.
-	tempForm _ Form extent: displayBox extent.
+	tempForm _ Form extent: displayBox extent depth: 32. tempForm fillWhite.
 	colors _ BlackAndWhites at: state.
 	colors with: Locations do:
 		[: color : loc | 
@@ -9468,13 +9468,13 @@ blueButtonActivity
 close
 	"Do zooming animation and remember the current view display box on close. In order to do the animation, fromFrame must be non-nil and in order to remember the display box fromHolder must be non-nil."
 
-	model changeRequest ifFalse: [^self].
+	"model changeRequest ifFalse: [^self].
 	status _ #closed.
 	view erase.
 	(fromHolder notNil)
 		ifTrue: [fromHolder lastFrame: (view displayBox)].
 	(fromFrame notNil)
-		ifTrue: [Display zoom: view displayBox to: fromFrame duration: 260].
+		ifTrue: [Display zoom: view displayBox to: fromFrame duration: 260]."
 	super close.!
 
 controlActivity
@@ -9672,7 +9672,7 @@ constraints: constraintList
 	constraints _ sorter asOrderedCollection.
 
 	"re-order the constraints in constraintList to match constraints"
-	constraintList setIndices.	"empties constraintList"
+	constraintList removeAll.	"empties constraintList"
 	constraintList addAll: constraints.
 	sorter release.
 	self buildVariableDictionary.
@@ -10285,8 +10285,8 @@ computeBackground
 
 	| viewExtent viewOrigin clipBox |
 	viewExtent _ enclosingRect extent max: self insetDisplayBox extent.
-	backgroundForm _ Form extent: viewExtent.
-	scratchForm _ Form extent: viewExtent.
+	backgroundForm _ Form extent: viewExtent depth: 32. backgroundForm fillWhite.
+	scratchForm _ Form extent: viewExtent depth: 32. scratchForm fillWhite.
 	viewOrigin _ self viewOrigin.
 	clipBox _ backgroundForm computeBoundingBox.
 
@@ -11203,7 +11203,7 @@ openOn: aForm
 	extent _ 354@332.
 	Display boundingBox height - 30 < extent y
 		ifTrue: [extent _ 318@294].
-	scratchForm _ Form extent: extent.
+	scratchForm _ Form extent: extent depth: 32. scratchForm fillWhite.
 	aForm
 		displayOn: scratchForm
 		at: ((extent - aForm boundingBox extent) // 2).
@@ -11261,12 +11261,11 @@ displayView
 expandLabelFrame
 	"Make my label frame fill the entire width of my display box. Assume that labelFrame topLeft has already been computed."
 
-	labelFrame
-		right: self displayBox width;
-		bottom:
+	labelFrame region: ((labelFrame region withRight: self displayBox width)
+		withBottom:
 			((labelText notNil)
 				ifTrue: [labelText boundingBox height]
-				ifFalse: [TextStyle default lineGrid]).!
+				ifFalse: [TextStyle default lineGrid])).!
 
 label: aString 
 	"Set aString to be my label. There are two label sizes: one for real computers and the other for small Macintoshes (toy computers)."
@@ -11285,13 +11284,9 @@ label: aString big: bigFlag
 		ifFalse:
 			[bigFlag
 				ifTrue:
-					[style _ TextStyle fontArray: (Array with:
-						((TextStyle default copy) fontAt: 1)).
-					 style baseline: 11; lineGrid: 17]
+					[style _ TextStyle default]
 				ifFalse:
-					[style _ TextStyle fontArray: (Array with:
-						((TextStyle named: #small copy) fontAt: 1)).
-			 		 style baseline: 9; lineGrid: 13].
+					[style _ TextStyle default].
 			 labelText _ Paragraph withText: aString asText style: style.
 			 labelFrame region:
 				(0@0 extent: labelText boundingBox extent)].
@@ -11303,7 +11298,7 @@ labelForm
 	"A customized label display for that special look-n-feel."
 
 	| form textBox textPlace leftEdge rightEdge |
-	form _ Form extent: labelFrame extent.
+	form _ Form extent: labelFrame extent depth: 32. form fillWhite.
 
 	"draw the label text"
 	textBox _ self labelTextBox.
@@ -13132,7 +13127,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		at: location + aDisplayPoint
 		clippingBox: clipBox
 		rule: (Form over)
-		fillColor: (Color black).! !
+		fillColor: (Color white).! !
 
 !ButtonGlyph methodsFor: 'mouse'!
 
@@ -13332,7 +13327,7 @@ initialize
 	"Use a dummy Form until nameForm can be updated from the actual object name."
 
 	super initialize.
-	nameForm _ Form extent: (10@12).! !
+	nameForm _ Form extent: (10@12) depth: 32. nameForm fillWhite.! !
 
 !IconGlyph methodsFor: 'accessing'!
 
@@ -13381,14 +13376,14 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		at: (aDisplayPoint + self iconOffset)
 		clippingBox: clipBox
 		rule: (Form over)
-		fillColor: (Color black).
+		fillColor: (Color white).
 
 	nameForm
 		displayOn: aDisplayMedium
 		at: (aDisplayPoint + self nameOffset)
 		clippingBox: clipBox
 		rule: (Form over)
-		fillColor: (Color black).!
+		fillColor: (Color white).!
 
 highlightOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 
@@ -14081,7 +14076,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 			at: location + aDisplayPoint
 			clippingBox: clipBox
 			rule: (Form over)
-			fillColor: (Color black)].!
+			fillColor: (Color white)].!
 
 highlightOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 
@@ -14688,7 +14683,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 			at: location + aDisplayPoint + (0@15)
 			clippingBox: clipBox
 			rule: (Form over)
-			fillColor: (Color black)].!
+			fillColor: (Color white)].!
 
 highlightOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 
@@ -15052,5 +15047,17 @@ black
 
 !Point methodsFor: 'ThingLab compatibility'!
 
+x: aNumber
+    self setX: aNumber setY: y.!
+    
+y: aNumber
+    self setX: x setY: aNumber.!
+
 unitVector
     ^self normalized.! !
+
+!Smalltalk class methodsFor: 'ThingLab compabibility'!
+
+quit
+    SmalltalkImage current snapshot: false andQuit: true.! !
+

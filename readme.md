@@ -66,7 +66,7 @@ Errors so far:
 - ThingLab's `QuickPrint` subclasses `CharacterScanner`, which used to subclass `BitBlt`, whose methods and vars `QuickPrint` relies on. These days, `CharacterScanner` subclasses `Object`, and there is a concrete `BitBltDisplayScanner` containing a `BitBlt`. `QuickPrint` now subclasses `BitBltDisplayScanner` and delegates to its `bitBlt` where necessary.
 - `ThingLabCustomMenu` subclasses `ActionMenu`, not present in Squeak - so it ends up subclassing `ProtoObject` (???), which doesn't understand inspector protocols and sends you into a bottomless pit of debugging windows. Ported `ActionMenu` from ST80 sources.
 
-Abandoned error: the very last line of the original ThingLabII.v2.st calls `initializeYellowButtonMenu` on all instances of ScreenController, but one or more doesNotUnderstand. Next round of errors seem to be about interfacing with ST80 MVC stuff as it exists in Squeak 6.0. Hurrah.
+Abandoned error: the very last line of the original ThingLabII.v2.st calls `initializeYellowButtonMenu` on all instances of ScreenController, but one or more doesNotUnderstand.
 
 For now, we can ignore the UI errors and attempt to fileIn the Things library in the workspace:
 
@@ -74,6 +74,18 @@ For now, we can ignore the UI errors and attempt to fileIn the Things library in
 (FileStream fileNamed: 'Things.v2.st') fileIn
 ```
 
-Current errors are first "failed to resolve constraints" (ignore) and then related to graphics API changes when clicking on UI elements.
+Current errors are first "failed to resolve constraints" (ignore) and then related to graphics API changes when clicking on UI elements. Constraint errors:
+
+- `SimpleRectThing>>initializeValues` on `self set: #extent.x to: 40`
+- `OrbitThing>>initializeConstraints` on:
+
+```smalltalk
+self require: 'newTheta = ((oldTheta + delta) \\ 360)'
+		where: #((newTheta theta.value)
+				 (oldTheta theta.last)
+				 (delta rate.node.value)).
+```
+
+- `OrbitThing>>initializeValues` on `self set: #rate.node.value to: 18`
 
 NB: Fixing these errors has been a *delight* compared to every other programming system I've ever used, because it's a live homogenous system, I can edit the code in the debugger and restart from that stack frame, inspect/browse anything and it was all pretty intuitive for me to figure out ... hence why I have the zeal of a new convert. The future has been here for 44 years, obscured by history, bad business decisions and Worse Is Better...
