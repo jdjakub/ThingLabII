@@ -1973,8 +1973,8 @@ initializeStructure
 
 initializeValues
 
-	self set: #box.extent.x to: 30.
-	self set: #box.extent.y to: 15.
+	self set: #box.extent.x to: 60.
+	self set: #box.extent.y to: 35.
 	self set: #node.location.x to: 25.
 	self set: #node.location.y to: 30.
 	self set: #node.value to: 'Text'.! !

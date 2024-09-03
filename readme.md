@@ -32,6 +32,8 @@ ParcPlace release 2.3).
 
 ![Current status screenshot](screenshot-no-ui-errors-on-load.jpg)
 
+![Parts Bin Icons](parts-bin-icons.jpg)
+
 I'm a recent (zealous) convert to Squeak after visiting HPI, so I'm not too knowledgable yet. I've been following [Lawson English's youtube tutorials](https://www.youtube.com/watch?v=Es7RyllOS-M&list=PL6601A198DF14788D) and the [Squeak By Example 6.0](https://squeak.org/#documentation) ebook.
 
 Instructions:
@@ -65,6 +67,8 @@ Errors so far:
 - ThingLab refers to a `Cursor hand` but it's not present even in the ST80 sources. Using `Cursor webLink` instead. API change `Sensor mousePoint` -> `Sensor cursorPoint`, fingers crossed this means the same thing.
 - ThingLab's `QuickPrint` subclasses `CharacterScanner`, which used to subclass `BitBlt`, whose methods and vars `QuickPrint` relies on. These days, `CharacterScanner` subclasses `Object`, and there is a concrete `BitBltDisplayScanner` containing a `BitBlt`. `QuickPrint` now subclasses `BitBltDisplayScanner` and delegates to its `bitBlt` where necessary.
 - `ThingLabCustomMenu` subclasses `ActionMenu`, not present in Squeak - so it ends up subclassing `ProtoObject` (???), which doesn't understand inspector protocols and sends you into a bottomless pit of debugging windows. Ported `ActionMenu` from ST80 sources.
+- `Point` and `Rectangle` seem to have been made immutable, where the same methods called by ThingLab now return a new object instead of mutating the old one. This is a straightforward fix, except for the one place ThingLab relies on this behaviour (computing forces in the constraing debugger force layout; I've polyfilled the mutation methods).
+- ThingLab creates many 16x16 monochrome icons using `Form extent:fromArray:offset`, providing an array of 16-bit integers for the pixel rows. However, all we get is a blank square. `Form` seems to have a minimum size of 32x32, at least for 1-bit depth, so we intercept these constructions and shift the array left by 16 to get the graphics in the left half of the 32x32 grid.
 
 Abandoned error: the very last line of the original ThingLabII.v2.st calls `initializeYellowButtonMenu` on all instances of ScreenController, but one or more doesNotUnderstand.
 
