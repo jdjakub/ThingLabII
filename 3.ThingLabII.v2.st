@@ -3350,29 +3350,19 @@ clipRect
 drawString: aString
 	"Draw the given string."
 
+	| dt |
 	destX _ bitBlt clipX.
 	destY _ bitBlt clipY.
-	self
-		scanCharactersFrom: 1
-		to: (aString size)
-		in: aString
-		rightX: (bitBlt clipX + bitBlt clipWidth)
-		stopConditions: stopConditions
-		kern: 0!
+	dt _ DisplayText text: aString asText.
+	dt foregroundColor: Color black backgroundColor: Color white.
+	dt displayOn: bitBlt destForm at: (destX @ destY) clippingBox: self clipRect rule: Form over fillColor: Color white. !
 
 stringWidth: aString
 	"Answer the width of the given string."
 
-	destX _ 0.
-	destY _ 0.
-	self
-		scanCharactersFrom: 1
-		to: (aString size)
-		in: aString
-		rightX: 10000	"virtual infinity"
-		stopConditions: stopConditions
-		kern: 0.
-	^destX! !
+	| dt |
+	dt _ DisplayText text: aString asText.
+	^dt computeBoundingBox width.! !
 
 !QuickPrint methodsFor: 'positioning'!
 
@@ -3381,7 +3371,7 @@ downBy: offset
 
 	| clipBox |
 	clipBox _ self clipRect.
-	clipBox top: ((clipBox top + offset) min: clipBox bottom).
+	clipBox := clipBox top: ((clipBox top + offset) min: clipBox bottom).
 	self clipRect: clipBox.!
 
 rightBy: offset
@@ -3389,7 +3379,7 @@ rightBy: offset
 
 	| clipBox |
 	clipBox _ self clipRect.
-	clipBox left: ((clipBox left + offset) min: clipBox right).
+	clipBox := clipBox left: ((clipBox left + offset) min: clipBox right).
 	self clipRect: clipBox.! !
 
 !QuickPrint methodsFor: 'private'!
@@ -10019,7 +10009,7 @@ displaySolutionInfoOn: aDisplayMedium at: aPoint clippingBox: clipBox
 	"Display information about the number of solutions and partitions and whether there is a cycle in the currently selected solution."
 
 	| infoBox printer |
-	infoBox _ ((10@10 extent: 170@48) translateBy: aPoint)
+	infoBox _ ((10@10 extent: 200@80) translateBy: aPoint)
 				intersect: clipBox.
 	aDisplayMedium border: infoBox width: 1.
 	printer _
@@ -10028,7 +10018,7 @@ displaySolutionInfoOn: aDisplayMedium at: aPoint clippingBox: clipBox
 	printer drawString:
 		'Partition ', model partitionIndex printString,
 		' of ', model partitionCount printString.
-	printer downBy: 14.
+	printer downBy: 20.
 	(model solutionIndex = 0)
 		ifTrue:
 			[printer drawString: 'Current solution']
@@ -10036,7 +10026,7 @@ displaySolutionInfoOn: aDisplayMedium at: aPoint clippingBox: clipBox
 			[printer drawString:
 				'Alternative ', model solutionIndex printString,
 				' of ', model solutionCount printString].
-	printer downBy: 14.
+	printer downBy: 20.
  	(model solutionHasCycle) ifTrue:
 		[printer drawString: 'Cycle Detected!!'].! !
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
@@ -11271,7 +11261,8 @@ label: aString
 	"Set aString to be my label. There are two label sizes: one for real computers and the other for small Macintoshes (toy computers)."
 
 	self label: aString big: (ThingLabIIControlPanel bigLabelFlag).
-	self expandLabelFrame.!
+	self expandLabelFrame.
+	self setLabelRegion. "So that labelFrame border rect is replaced by a number" !
 
 label: aString big: bigFlag
 	"Set aString to be my label. Use big text if bigFlag is true, otherwise use small text."
@@ -15061,3 +15052,30 @@ unitVector
 quit
     SmalltalkImage current snapshot: false andQuit: true.! !
 
+!Rectangle methodsFor: 'ThingLab compatibility'!
+
+moveBy: aPoint 
+	"Change the corner positions of the receiver so that its area translates by
+	the amount defined by the argument, aPoint."
+	origin _ origin + aPoint.
+	corner _ corner + aPoint! !
+
+!View methodsFor: 'ThingLab compatibility'!
+
+displaySafe: aBlock
+    "Who knows what this method used to be for?"
+
+    ^aBlock value! !
+
+!Form class methodsFor: 'ThingLab compatibility'!
+extent: extentPoint fromArray: anArray offset: offsetPoint 
+	"Answer an instance of me of depth 1 with bitmap initialized from anArray."
+	
+	| array |
+	array := anArray.
+	"For some reason, in 2024, intialising a 1-bit 16x16 Form requires 32-bit values to work properly.
+	It's like there's a minimum 32x32 size for 1-bit Forms, idk."
+	extentPoint = (16@16) ifTrue: [array := anArray collect: [:v | v << 16]].
+	^ (self extent: extentPoint depth: 1)
+		offset: offsetPoint;
+		initFromArray: array! !
