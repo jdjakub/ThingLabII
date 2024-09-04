@@ -414,7 +414,7 @@ findPivotFrom: start to: stop
 
 insertionSort: aView
 
-	| i j bar1 bar2 |
+	| j bar1 bar2 |
 	2 to: array size do:
 		[: i |
 		 j _ i.
@@ -459,7 +459,7 @@ quickSortFrom: start to: stop in: aView
 
 selectionSort: aView
 
-	| i j low lowKey temp |
+	| low lowKey temp |
 	1 to: array size - 1 do:
 		[: i |
 		 low _ i.
@@ -517,7 +517,7 @@ buildArray: count
 	array _ (1 to: count) collect:
 		[: i |
 		 bar _ RectThing new.
-		 bar set: #fillMask to: Form black.
+		 bar set: #fillMask to: Color black.
 		 EqualityConstraint require: bar->#center.x equals: center.
 		 EqualityConstraint require: bar->#extent.y equals: width.
 		 self addGlyph: bar.
@@ -562,7 +562,7 @@ buildButtons
 initializeBars
 
 	| bar random |
-	random _ Random fromGenerator: 1 seededWith: seed. 
+	random _ Random seed: seed. 
 	1 to: array size do:
 		[: i |
 		 bar _ array at: i.
@@ -762,7 +762,7 @@ addLayoutConstraints
 				(('r', row printString, 'c', col printString) asSymbol).
 			 square set: #fillRule to: (Form over).
 			 square set: #fillMask to:
-				((black) ifTrue: [Form black] ifFalse: [Form lightGray]).
+				((black) ifTrue: [Color black] ifFalse: [Form lightGray]).
 			 (previousSquare isNil)
 				ifTrue:
 					["this is the first square of a new row"
