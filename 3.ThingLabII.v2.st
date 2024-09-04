@@ -13,6 +13,24 @@ program in a commercial product, contact:
 ThingLab II was written between 1988 and 1990 by John Maloney and
 Bjorn N. Freeman-Benson with the guidance of Alan Borning."!
 
+"---"!
+
+!Form class methodsFor: 'ThingLab compatibility'!
+extent: extentPoint fromArray: anArray offset: offsetPoint
+	"Answer an instance of me of depth 1 with bitmap initialized from anArray."
+	
+	| array |
+	array := anArray.
+	"For some reason, in 2024, intialising a 1-bit 16x16 Form requires 32-bit values to work properly.
+	It's like there's a minimum 32x32 size for 1-bit Forms, idk.
+	SEE ALSO: Comment in Cursor>>extent:fromArray:offset:, which already does this so must be detected..."
+	self ~= Cursor and: [extentPoint x = 16 ifTrue: [
+		array := anArray collect: [:v | v << 16]]].
+	^ (self extent: extentPoint depth: 1)
+		offset: offsetPoint;
+		initFromArray: array! !
+
+"---"!
 
 !Number methodsFor: 'ThingLabII'!
 
@@ -3432,7 +3450,7 @@ newOn: aForm box: aRectangle
 lineHeight
 	"Answer the height of the font used by QuickPrint."
 
-	^(TextStyle default fontAt: 1) height!
+	^TextStyle defaultFont height!
 
 width: aString
 	"Answer the width of the printed representation of the given string in pixels."
@@ -5561,8 +5579,10 @@ renameInstVarAt: index as: nameString
 compileAccessMethodsFor: thingsOrObjects named: partNames
 	"Compile access methods for the given parts. The two arguments should be sequenceable collections of the same size. thingsOrObjects are prototypes for the parts (either Things or normal Smalltalk objects) and partNames are the names for these parts."
 
-	| encoder |
-	encoder _ (Encoder new) init: self context: nil notifying: nil.
+	| cue encoder |
+	cue _ CompilationCue new initializeWithSource: nil context: nil
+        receiver: Object class: Object environment: (Environment new initialize) requestor: nil.
+	encoder _ (EncoderForSistaV1 new) init: cue notifying: nil.
 	partNames with: thingsOrObjects do:
 		[: partName : thingOrObject |
 		 BusyCursor inc.
@@ -6735,7 +6755,8 @@ openOn: aThing zoomingFrom: fromRect
 		on: (self on: aThing)
 		aspect: #explainText
 		change: #explainText:
-		menu: #textMenu.
+		menu: #textMenu
+		initialSelection: nil.
 	textView
 		controller: ExplanationController new;
 		borderWidth: 1.
@@ -9451,7 +9472,7 @@ blueButtonActivity
 		[BlueButtonMenu _ ActionMenu
 			labels: ' under \ move \ frame \ close ' withCRs
 			lines: #(3)
-			selectors: #(under move frame close)].
+			selectors: #(under move reframe close)].
 	i _ BlueButtonMenu startUp.
 	(i > 0) ifTrue: [self perform: (BlueButtonMenu selectorAt: i)].!
 
@@ -11217,6 +11238,12 @@ StandardSystemView subclass: #SpecialSystemView
 	poolDictionaries: ''
 	category: 'ThingLabII-UI-Support'!
 
+!SpecialSystemView class methodsFor: 'Squeak compatibility'!
+model: aModel label: aString minimumSize: aPoint
+	^self new model: aModel;
+				label: aString;
+				minimumSize: aPoint;
+				yourself! !
 
 !SpecialSystemView methodsFor: 'controller access'!
 
@@ -12797,8 +12824,8 @@ doCursorFeedback
 	(self destinationTopView isNil)
 		ifTrue: [(currentCursor ~~ Cursor normal)
 			ifTrue: [(currentCursor _ Cursor normal) show]]
-		ifFalse: [(currentCursor ~~ Cursor bull)
-			ifTrue: [(currentCursor _ Cursor bull) show]].! !
+		ifFalse: [(currentCursor ~~ Cursor crossHair)
+			ifTrue: [(currentCursor _ Cursor crossHair) show]].! !
 
 SceneController subclass: #BasicThingController
 	instanceVariableNames: 'editConstraints plan running '
@@ -14388,8 +14415,8 @@ initialize
 		extent: 16@16
 		fromArray: #(16383 16387 32773 65533 32773 36901 32773 65533 32773 36901 32773 65533 32773 36901 32774 65532)
 		offset: 0@0.
-	GridX _ 60.
-	GridY _ 35.
+	GridX _ 140.
+	GridY _ 60.
 
 	"make a new TopBin"
 	TopBin _ self newNamed: 'Top Bin'.
@@ -15021,6 +15048,9 @@ white: aRectangle
 white
 	self fillWhite.!
 
+gray: aRectangle
+	self fillGray: aRectangle.!
+
 lightGray: aRectangle 
 	self fillLightGray: aRectangle.!
 
@@ -15058,7 +15088,10 @@ moveBy: aPoint
 	"Change the corner positions of the receiver so that its area translates by
 	the amount defined by the argument, aPoint."
 	origin _ origin + aPoint.
-	corner _ corner + aPoint! !
+	corner _ corner + aPoint!
+	
+contains: aRect
+	^self containsRect: aRect! !
 
 !View methodsFor: 'ThingLab compatibility'!
 
@@ -15067,15 +15100,10 @@ displaySafe: aBlock
 
     ^aBlock value! !
 
-!Form class methodsFor: 'ThingLab compatibility'!
-extent: extentPoint fromArray: anArray offset: offsetPoint 
-	"Answer an instance of me of depth 1 with bitmap initialized from anArray."
-	
-	| array |
-	array := anArray.
-	"For some reason, in 2024, intialising a 1-bit 16x16 Form requires 32-bit values to work properly.
-	It's like there's a minimum 32x32 size for 1-bit Forms, idk."
-	extentPoint = (16@16) ifTrue: [array := anArray collect: [:v | v << 16]].
-	^ (self extent: extentPoint depth: 1)
-		offset: offsetPoint;
-		initFromArray: array! !
+!PluggableTextView class methodsFor: 'ThingLab compatibility'!
+on: anObject aspect: aspectMsg change: changeMsg menu: menuMsg
+	^ self on: anObject text: aspectMsg accept: changeMsg readSelection: nil menu: menuMsg.! !
+
+!StringHolderView methodsFor: 'ThingLab compatibility'!
+getContents
+	^model contents!

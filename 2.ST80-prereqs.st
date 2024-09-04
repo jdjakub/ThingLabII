@@ -320,3 +320,144 @@ reset
 	marker ifNil: [self computeForm].
 	marker _  marker align: marker topLeft with: frame topLeft + frame borderWidth.
 	selection _ 0.! !
+
+PluggableTextController subclass: #CodeController
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Interface-Text'!
+CodeController comment:
+'This controller adds some capability appropriate only to viewing Smalltalk code,
+such as ''explain'' and ''format''.'!
+
+
+!CodeController methodsFor: 'menu messages'!
+doIt
+	"Evaluate the current text selection as an expression"
+	| result selectionStart oldTextSize selection |
+	self controlTerminate.
+	selectionStart _ startBlock stringIndex.
+	oldTextSize _ self text size.
+	selection _ self selection.
+	result _ 
+		model doItReceiver class evaluatorClass new
+				evaluate: self selectionAsStream
+				in: model doItContext
+				to: model doItReceiver
+				notifying: self
+				ifFail: 
+					[self controlInitialize.
+					^#failedDoit].
+	self selection asString = selection asString ifFalse:
+		[self selectFrom: selectionStart  "Reselect doIt range after compiler interaction"
+			to: selectionStart + selection size - 1 + (self text size - oldTextSize)].
+	Smalltalk logChange: self selection string.
+	model doItValue: result.
+	self controlInitialize.
+	^result!
+explain
+	"Try to shed some light on what kind of entity the current selection is.    
+	The selection must be a single token or construct.  Insert the answer   
+	after the selection.  Call private routines whose names begin with   
+	'explain'.  They return a String if they recognise the selection, else nil."
+	| reply |
+	reply _ (Explainer new
+		class: model selectedClass
+		selector: model selector
+		instance: model doItReceiver
+		context: model doItContext
+		methodText: model text) explain: self selection string for: model.
+	reply size = 0 ifTrue:
+		[reply _ '"Sorry, I can''t explain that.  Please select a single token, construct, or special character.' ,
+			(model isUnlocked ifTrue: ['"'] ifFalse: ['  Also, please cancel or accept."']).
+].
+	self insertAndSelect: reply at: stopBlock stringIndex!
+format
+	"Reformat the contents of the receiver's view, formatted, if the view is unlocked."
+	| selectedClass aCompiler newText |
+	Sensor leftShiftDown ifTrue: [^self miniFormat].
+	self textHasChanged
+		ifTrue: [view flash. ^self].
+	selectedClass _ model selectedClass.
+	self controlTerminate.
+	Cursor execute showWhile:
+		[aCompiler _ selectedClass compilerClass new.
+		self selectFrom: 1 to: paragraph text size.
+		self deselect.
+		newText _ 
+			aCompiler
+				format: model text
+				in: selectedClass
+				notifying: self.
+		newText == nil ifFalse: 
+			[self replaceSelectionWith: (newText asText makeSelectorBoldIn: selectedClass).
+			self selectAt: 1]].
+	self controlInitialize!
+localMenuItem: selector
+	^ (#(doIt printIt format explain) includes: selector) or:
+		[super localMenuItem: selector]!
+miniFormat
+	"Replace selection with selection un-wrapped."
+
+	| inStream outStream char |
+	inStream _ ReadStream on: (self selection copyWithout: Character tab).
+	outStream _ WriteStream on: (String new: self selection size).
+	[inStream atEnd]
+		whileFalse: 
+			[char _ inStream next.
+			char isSeparator
+				ifTrue: 
+					[outStream space.
+					[inStream atEnd not and: [inStream peek isSeparator]]
+						whileTrue: [inStream next]]
+				ifFalse: [outStream nextPut: char]].
+	self deselect.
+	self replaceSelectionWith: outStream contents asText.
+	self select!
+printIt
+	"Evaluate the current selection as an expression.  If successful, insert and
+	select the printString of the result of evaluation after the current selection."
+	| result |
+	result _ self doIt.
+	result ~~ #failedDoit
+		ifTrue: [self insertAndSelect: result printString at: stopBlock stringIndex]! !
+
+PluggableTextView subclass: #CodeView
+	instanceVariableNames: 'initialSelection '
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Interface-Text'!
+CodeView comment:
+'I am a TextView that assumes the text is code.  I include support for initial selection of a part of the text.'!
+
+!CodeView methodsFor: 'initialize-release'!
+initialSelection: sel
+	initialSelection _ sel!
+newText: aText
+	super newText: aText.
+	initialSelection==nil ifFalse: [self controller findAndSelect: initialSelection]! !
+
+!CodeView methodsFor: 'controller access'!
+defaultControllerClass
+	^ CodeController! !
+
+!CodeView methodsFor: 'updating'!
+update: aSymbol
+	| range |
+	aSymbol == #pc ifTrue:
+		[range _ model pcRange.
+		self controller selectAndScrollFrom: range first to: range last].
+	super update: aSymbol! !
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+CodeView class
+	instanceVariableNames: ''!
+
+
+!CodeView class methodsFor: 'instance creation'!
+on: anObject aspect: m1 change: m3 menu: m4 initialSelection: sel
+	"Create an instance viewing anObject.  See super method in TextView for full
+	explanation.  initialSelection (if not nil) is a string which will be searched for,
+	and then highlighted if found, whenever the viewed text changes."
+
+	^ (super on: anObject aspect: m1 change: m3 menu: m4) initialSelection: sel! !
