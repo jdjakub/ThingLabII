@@ -15107,3 +15107,26 @@ on: anObject aspect: aspectMsg change: changeMsg menu: menuMsg
 !StringHolderView methodsFor: 'ThingLab compatibility'!
 getContents
 	^model contents!
+
+!Form methodsFor: 'ThingLab compatibility'!
+readFromOldFormat: aBinaryStream
+	"Read a Form in the original ST-80 format."
+
+	| w h offsetX offsetY newForm theBits pos |
+	w := aBinaryStream nextWord.
+	h := aBinaryStream nextWord.
+	offsetX  := aBinaryStream nextWord.
+	offsetY := aBinaryStream nextWord.
+	offsetX > 32767 ifTrue: [offsetX := offsetX - 65536].
+	offsetY > 32767 ifTrue: [offsetY := offsetY - 65536].
+	newForm := Form extent: w @ h offset: offsetX @ offsetY.
+	theBits := newForm bits.
+	pos := 0.
+	1 to: w + 31 // 32 do: [:j |
+		1 to: h do: [:i || upper lower thisWord |
+			upper := aBinaryStream nextWord.
+			lower := aBinaryStream nextWord.
+			thisWord := upper << 16 + lower.
+			theBits at: (pos := pos+1) put: thisWord]].
+	newForm bits: theBits.
+	^ newForm! !
