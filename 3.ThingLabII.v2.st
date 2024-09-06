@@ -538,8 +538,8 @@ removeNodesSurrounding: aVariable
 
 	| dictOrNil theTree newTree |
 	theTree _ self.
-	[(theTree receiver isMemberOf: VariableNode)
-		and: [theTree receiver key = aVariable]]
+	[(theTree receiver isKindOf: VariableNode)
+		and: [theTree receiver key key = aVariable]]
 		whileFalse: 
 			[EquationTranslator restructureRules
 				detect: 
@@ -595,7 +595,7 @@ allVariables
 	vars _ IdentitySet new.
 	self apply:
 		[: node |
-		 (node isMemberOf: VariableNode)
+		 (node isKindOf: VariableNode)
 			ifTrue: [vars add: node name asSymbol].
 		 true].
 
@@ -694,7 +694,7 @@ match: targetTree using: matchDict
 	(matchDict isNil)
 		ifTrue:
 			["we must have an exact match"
-			 ^(targetTree isMemberOf: VariableNode) and:
+			 ^(targetTree isKindOf: VariableNode) and:
 			   [name = targetTree name & key = targetTree key]]
 		ifFalse:
 			[binding _ matchDict
@@ -1361,7 +1361,7 @@ applyUsing: mappingDict
 
 	^to transformBy:		"transformBy: makes a copy of the tree"
 		[: node |
-		 (node isMemberOf: VariableNode)
+		 (node isKindOf: VariableNode)
 			ifTrue: [node mapBy: mappingDict]
 			ifFalse: [node]]!
 
@@ -2047,7 +2047,7 @@ contents: aString
 	| tree thingName partNames parts nonThingPart type newThing |
 	tree _  (EquationParser parse: ('dummy ', aString) readStream)
 				block statements first.
-	(tree isMemberOf: VariableNode) ifTrue:
+	(tree isKindOf: VariableNode) ifTrue:
 		[thingName _ tree name asSymbol.
 		 ((Smalltalk includesKey: thingName) and:
 		   [(Smalltalk at: thingName) inheritsFrom: Thing])
@@ -5580,8 +5580,9 @@ compileAccessMethodsFor: thingsOrObjects named: partNames
 	"Compile access methods for the given parts. The two arguments should be sequenceable collections of the same size. thingsOrObjects are prototypes for the parts (either Things or normal Smalltalk objects) and partNames are the names for these parts."
 
 	| cue encoder |
+	"When this is called, self is the new custom-made Thing class (e.g. Thing1, Thing2, ...)"
 	cue _ CompilationCue new initializeWithSource: nil context: nil
-        receiver: Object class: Object environment: (Environment new initialize) requestor: nil.
+        receiver: Object class: self environment: (Environment new initialize) requestor: nil.
 	encoder _ (EncoderForSistaV1 new) init: cue notifying: nil.
 	partNames with: thingsOrObjects do:
 		[: partName : thingOrObject |
@@ -8921,7 +8922,7 @@ remapVars: parseTree for: constraint varMap: varMap encoder: encoder
 				ifFalse: [encoder autoBind: varEntry name])].
 	^parseTree transformBy:	"apply the mapping"
 		[: node |
-		 (node isMemberOf: VariableNode)
+		 (node isKindOf: VariableNode)
 			ifTrue: [mappingDict at: (node name asSymbol) ifAbsent: [node]]
 			ifFalse: [node]]! !
 
@@ -9110,7 +9111,7 @@ replace: var with: expr in: statements after: index
 		 old _ statements at: i.
 		 new _ old transformBy:
 			[: node |
-			 ((node isMemberOf: VariableNode) and:
+			 ((node isKindOf: VariableNode) and:
 			   [node name = var])
 				ifTrue: [expr transformBy: [: n | n] "copies expr tree"]
 				ifFalse: [node]].
@@ -9140,7 +9141,7 @@ var: var usageCountAfter: index in: statements
 		[: i |
 		 (statements at: i) apply:
 			[: node |
-			 ((node isMemberOf: VariableNode) and:
+			 ((node isKindOf: VariableNode) and:
 			   [node name = var]) ifTrue:
 				[count _ count + 1].
 			 true	"apply this block to the entire tree"]].
@@ -15106,7 +15107,7 @@ on: anObject aspect: aspectMsg change: changeMsg menu: menuMsg
 
 !StringHolderView methodsFor: 'ThingLab compatibility'!
 getContents
-	^model contents!
+	^model contents! !
 
 !Form methodsFor: 'ThingLab compatibility'!
 readFromOldFormat: aBinaryStream
