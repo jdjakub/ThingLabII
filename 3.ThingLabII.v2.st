@@ -24,7 +24,7 @@ extent: extentPoint fromArray: anArray offset: offsetPoint
 	"For some reason, in 2024, intialising a 1-bit 16x16 Form requires 32-bit values to work properly.
 	It's like there's a minimum 32x32 size for 1-bit Forms, idk.
 	SEE ALSO: Comment in Cursor>>extent:fromArray:offset:, which already does this so must be detected..."
-	self ~= Cursor and: [extentPoint x = 16 ifTrue: [
+	self ~= Cursor and: [extentPoint x < 32 ifTrue: [
 		array := anArray collect: [:v | v << 16]]].
 	^ (self extent: extentPoint depth: 1)
 		offset: offsetPoint;
@@ -11692,14 +11692,14 @@ buildButtons
 		extent: 10@9
 		fromArray: #(3072 7168 15360 32704 65472 32704 15360 7168 3072)
 		offset: 0@0).
-	rightArrowForm _ leftArrowForm rotateBy: 2.
-	self addGlyph: ((ButtonGlyph at: 21@20 form: leftArrowForm)
+	rightArrowForm _ leftArrowForm rotateBy: 180.
+	self addGlyph: ((ButtonGlyph at: 21@25 form: leftArrowForm)
 					 action: [: v | self previousPartition]).
-	self addGlyph: ((ButtonGlyph at: 38@20 form: rightArrowForm)
+	self addGlyph: ((ButtonGlyph at: 38@25 form: rightArrowForm)
 					 action: [: v | self nextPartition]).
-	self addGlyph: ((ButtonGlyph at: 21@34 form: leftArrowForm)
+	self addGlyph: ((ButtonGlyph at: 21@45 form: leftArrowForm)
 					 action: [: v | self previousAlternative]).
-	self addGlyph: ((ButtonGlyph at: 38@34 form: rightArrowForm)
+	self addGlyph: ((ButtonGlyph at: 38@45 form: rightArrowForm)
 					 action: [: v | self nextAlternative]).!
 
 buildPartitions
@@ -13467,7 +13467,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		at: aDisplayPoint + location
 		clippingBox: clipBox
 		rule: Form paint
-		fillColor: Color black.!
+		fillColor: nil.!
 
 form
 	"Answer the arrowhead form for my vector."
