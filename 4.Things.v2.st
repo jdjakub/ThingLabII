@@ -96,7 +96,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ Form
 		extent: 16@16
-		fromArray: #(0 0 0 0 0 896 1984 1984 1984 896 0 0 0 0 0 0 )
+		fromArray16: #(0 0 0 0 0 896 1984 1984 1984 896 0 0 0 0 0 0 )
 		offset: 0@0.
 	explainText _ 'A Point is the fundamental unit of location and movement within ThingLabII'.
 	DisplayForm _ (Form dotOfSize: 4) offset: -2@-2.! !
@@ -212,7 +212,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(0 0 0 0 16380 8196 8196 8196 8196 8196 8196 8196 8196 16380 0 0)
+		fromArray16: #(0 0 0 0 16380 8196 8196 8196 8196 8196 8196 8196 8196 16380 0 0)
 		offset: 0@0).
 	explainText _ 'A SimpleRectThing consists of four points (topLeft, center, bottomRight, and extent) and a mask and rule for filling itself with some pattern. If the mask is nil, only its outline is displayed. A SimpleRectThing has no constraints among its parts.'.! !
 
@@ -292,7 +292,7 @@ form
 
 	^Form
 		extent: 13@38
-		fromArray: #(384 960 832 832 576 576 704 704 896 896 896 1792 3840 7680 15872 14848 29184 29184 59360 59376 53240 51768 51736 52760 50712 25112 12848 6752 4032 512 512 512 12800 31232 31232 29184 25600 14336)
+		fromArray16: #(384 960 832 832 576 576 704 704 896 896 896 1792 3840 7680 15872 14848 29184 29184 59360 59376 53240 51768 51736 52760 50712 25112 12848 6752 4032 512 512 512 12800 31232 31232 29184 25600 14336)
 		offset: 7@-9!
 
 glyphDependsOn
@@ -322,7 +322,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(128 192 160 192 384 640 1216 2464 2704 2768 2448 1184 960 128 640 256)
+		fromArray16: #(128 192 160 192 384 640 1216 2464 2704 2768 2448 1184 960 128 640 256)
 		offset: 0@0).
 	explainText _ 'A TrebleClefThing is a staff with built in treble clef. The staff width is determined by the width component while the vertical offset of middle C (from the top of the staff) is given by the middleCOffset component.'.! !
 
@@ -384,7 +384,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(0 0 0 0 16380 8196 8196 8196 8196 8196 8196 8196 8196 16380 0 0)
+		fromArray16: #(0 0 0 0 16380 8196 8196 8196 8196 8196 8196 8196 8196 16380 0 0)
 		offset: 0@0).
 	explainText _ 'A RectThing is like a SimpleRectThing but the corners, center, and extent are constrained so that that given any two of these we can compute the others. This generality is expensive, however, so it it best to use one of the more limited varieties of rectangle things (CenterRectThing or FixedRectThing) where appropriate.'.! !
 
@@ -458,12 +458,12 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(384 960 960 384 384 384 384 8580 29070 63903 8580 12684 6552 4080 2016 0)
+		fromArray16: #(384 960 960 384 384 384 384 8580 29070 63903 8580 12684 6552 4080 2016 0)
 		offset: 0@0).
 	explainText _ 'A PointAnchor is a point with an attached "preferred stay" constraint.'.
 	DisplayForm _ (Form
 		extent: 16@15
-		fromArray: #(384 960 960 384 384 384 384 8580 29070 63903 8580 12684 6552 4080 2016)
+		fromArray16: #(384 960 960 384 384 384 384 8580 29070 63903 8580 12684 6552 4080 2016)
 		offset: -8@-2).! !
 
 PointAnchor initialize!
@@ -512,7 +512,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(0 0 0 0 16380 8196 8196 8196 8196 8196 8196 8196 8196 16380 0 0)
+		fromArray16: #(0 0 0 0 16380 8196 8196 8196 8196 8196 8196 8196 8196 16380 0 0)
 		offset: 0@0).
 	explainText _ 'A CenterRectThing is a SimpleRectThing with the addition of constraints to keep the center point midway between the origin and corner points and to keep the extent point updated. The extent cannot be changed by any other constraints.'.! !
 
@@ -600,7 +600,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(65535 54613 43691 54613 65535 32769 32769 32769 32769 32769 32769 32769 32769 32769 32769 65535)
+		fromArray16: #(65535 54613 43691 54613 65535 32769 32769 32769 32769 32769 32769 32769 32769 32769 32769 65535)
 		offset: 0@0).
 	explainText _ 'A FrameThing acts a the placeholder for the window boundary when constructing stand-alone Things. Both corners are anchored.'.! !
 
@@ -667,7 +667,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ Form
 		extent: 16@16
-		fromArray: #(0 0 28 28 28 0 0 896 896 896 0 0 28672 28672 28672 0)
+		fromArray16: #(0 0 28 28 28 0 0 896 896 896 0 0 28672 28672 28672 0)
 		offset: 0@0.
 	explainText _ 'A MidPoint consists of three colinear points with the middle point constrained to lie midway between the other two.'.! !
 
@@ -725,7 +725,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(0 0 0 0 16380 8196 8196 8196 8196 8196 8196 8196 8196 16380 0 0)
+		fromArray16: #(0 0 0 0 16380 8196 8196 8196 8196 8196 8196 8196 8196 16380 0 0)
 		offset: 0@0).
 	explainText _ 'A FixedRectThing is a SimpleRectThing with the addition of constraints that use its width and height to compute a corner and the center given the other corner. The center cannot be changed by any other constraints but the extent can.'.! !
 
@@ -812,7 +812,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ Form
 		extent: 16 @ 16
-		fromArray: #(0 2 6 12 24 48 96 192 384 768 1536 3072 6144 12288 8192 0)
+		fromArray16: #(0 2 6 12 24 48 96 192 384 768 1536 3072 6144 12288 8192 0)
 		offset: 0 @ 0.
 	explainText _ 'A LineThing is an unconstrained line. It consists of two points connected by a line segment.'.
 	PenForm _ Form dotOfSize: 1.! !
@@ -845,7 +845,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(0 2 6 12 24 48 96 192 384 768 1536 3072 6144 12288 8192 0)
+		fromArray16: #(0 2 6 12 24 48 96 192 384 768 1536 3072 6144 12288 8192 0)
 		offset: 0@0).
 	explainText _ 'A PlainLine is like a regular line except that the endpoints are not displayed.'.! !
 
@@ -878,7 +878,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(384 960 960 384 384 384 384 384 384 384 384 384 384 960 960 384)
+		fromArray16: #(384 960 960 384 384 384 384 384 384 384 384 384 384 960 960 384)
 		offset: 0@0).
 	explainText _ 'A VLine is a LineThing constrained to remain vertical.'.! !
 
@@ -911,7 +911,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(0 0 0 0 0 0 24582 65535 65535 24582 0 0 0 0 0 0)
+		fromArray16: #(0 0 0 0 0 0 24582 65535 65535 24582 0 0 0 0 0 0)
 		offset: 0@0).
 	explainText _ 'An HLine is a line constrained to remain horizontal'.! !
 
@@ -1051,7 +1051,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(65532 32774 49142 32774 49142 32774 65534 61502 65534 32774 49142 32774 49142 32774 65534 32766)
+		fromArray16: #(65532 32774 49142 32774 49142 32774 65534 61502 65534 32774 49142 32774 49142 32774 65534 32766)
 		offset: 0@0).
 	explainText _ 'A ListThing consists of an itemsList, a bounding rectangle, and a selected item field that is nil if no item is selected.'.! !
 
@@ -1152,7 +1152,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(0 0 0 0 0 2016 2016 2016 2016 2016 2016 0 0 0 0 0)
+		fromArray16: #(0 0 0 0 0 2016 2016 2016 2016 2016 2016 0 0 0 0 0)
 		offset: 0@0).
 	explainText _ 'A Node is a value holder. It has a location and a value, which can be of any type. It also maintains a history of the last several values it has held.'.
 	DisplayForm _ (Form extent: 4@4) offset: -2@-2; black.! !
@@ -1297,7 +1297,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(0 2016 1056 1056 1056 2016 1056 1056 1056 1056 1056 1056 1056 1056 1056 2016)
+		fromArray16: #(0 2016 1056 1056 1056 2016 1056 1056 1056 1056 1056 1056 1056 1056 1056 2016)
 		offset: 0@0).
 	explainText _ 'A ScrollThing consists a node, a box, and a horizonal marker. The vertical position of the marker within the box is proportional to the value of the node within the range [minVal..maxVal].'.! !
 
@@ -1374,11 +1374,11 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(0 960 960 960 960 384 384 8580 29070 63903 8580 12684 6552 4080 2016 0)
+		fromArray16: #(0 960 960 960 960 384 384 8580 29070 63903 8580 12684 6552 4080 2016 0)
 		offset: 0@0).
 	DisplayForm _ (Form
 		extent: 16@15
-		fromArray: #(960 960 960 960 384 384 384 8580 29070 63903 8580 12684 6552 4080 2016)
+		fromArray16: #(960 960 960 960 384 384 384 8580 29070 63903 8580 12684 6552 4080 2016)
 		offset: -8@-2).
 	explainText _ 'A NodeAnchor is a node with an attached "preferred stay" constraint.'.! !
 
@@ -1502,7 +1502,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(0 0 6280 6600 6300 6280 6144 6144 6144 6144 6280 6300 6600 6280 0 0)
+		fromArray16: #(0 0 6280 6600 6300 6280 6144 6144 6144 6144 6280 6300 6600 6280 0 0)
 		offset: 0@0).
 	explainText _ 'A RodThing is a stretchable, compressible rod of some nominal length that obeys Hooke''s law for springs. I compute the force vector for each of my endpoints (which is zero if I am neither stretched nor compressed).'.! !
 
@@ -1537,7 +1537,7 @@ initializeValues
 	self set: #opForm to:
 		(Form
 			extent: 9@9
-			fromArray: #(65408 16640 40064 41600 33920 34944 32896 51584 32512)
+			fromArray16: #(65408 16640 40064 41600 33920 34944 32896 51584 32512)
 			offset: -4@-4).! !
 
 !ThreeWayOp methodsFor: 'glyphs'!
@@ -1632,7 +1632,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(8184 16380 28686 59367 53235 52275 52787 50787 49347 49539 49155 49539 57735 28686 16380 8184)
+		fromArray16: #(8184 16380 28686 59367 53235 52275 52787 50787 49347 49539 49155 49539 57735 28686 16380 8184)
 		offset: 0@0).
 	explainText _ 'A ThreeWayOp is a template Thing for three operand operators. It is used as a sub-part of other Things, rather than as a stand-alone Thing. It provides three Nodes and an operator Form.'.! !
 
@@ -1673,7 +1673,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(0 2016 1056 1056 1056 2016 1376 1696 1376 1696 1376 1696 1376 1696 1376 2016)
+		fromArray16: #(0 2016 1056 1056 1056 2016 1376 1696 1376 1696 1376 1696 1376 1696 1376 2016)
 		offset: 0@0).
 	explainText _ 'A VSliderThing is like a VScrollThing except that it draws "mercury" instead of just a horizontal marker.'.! !
 
@@ -1753,7 +1753,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(0 2080 4112 16376 4112 2080 0 49155 65535 49155 0 0 0 0 0 0)
+		fromArray16: #(0 2080 4112 16376 4112 2080 0 49155 65535 49155 0 0 0 0 0 0)
 		offset: 0@0).
 	explainText _ 'A WireThing propagates Node values the way an electrical wire propogates voltages.'.! !
 
@@ -1786,7 +1786,7 @@ initializeValues
 	self set: #op.opForm to:
 		(Form
 			extent: 9@11
-			fromArray: #(15872 16640 32896 34944 34944 48768 34944 34944 32896 16640 15872)
+			fromArray16: #(15872 16640 32896 34944 34944 48768 34944 34944 32896 16640 15872)
 			offset: -4@-5).! !
 
 !Sum methodsFor: 'access'!
@@ -1808,7 +1808,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ Form
 		extent: 16@16
-		fromArray: #(8184 16380 28686 57351 49539 49539 49539 53235 53235 49539 49539 49539 57351 28686 16380 8184)
+		fromArray16: #(8184 16380 28686 57351 49539 49539 49539 53235 53235 49539 49539 49539 57351 28686 16380 8184)
 		offset: 0@0.
 	explainText _ 'A Sum is a three operand arithmetic constraint, x + y = z'.! !
 
@@ -1951,7 +1951,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(65535 32769 32769 33281 34049 34945 61511 32809 32785 32769 32769 32769 65535 384 384 0)
+		fromArray16: #(65535 32769 32769 33281 34049 34945 61511 32809 32785 32769 32769 32769 65535 384 384 0)
 		offset: 0@0).
 	explainText _ 'A PenRecorderThing records and display the last N values of its input, like an oscilloscope. The vertical scale and offset are adjustable.'.! !
 
@@ -2075,7 +2075,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(0 65535 0 0 4559 14633 27944 17864 32040 17705 17871 0 0 65535 0 0)
+		fromArray16: #(0 65535 0 0 4559 14633 27944 17864 32040 17705 17871 0 0 65535 0 0)
 		offset: 0@0).
 	explainText _ 'A BasicTextThing holds an editable string in a resizable box plus a node containing the string to be displayed.'.! !
 
@@ -2121,7 +2121,7 @@ initializeValues
 	self set: #op.opForm to:
 		(Form
 			extent: 19@9
-			fromArray: #(65535 57344 32832 8192 36943 8192 36937 8192 36936 8192 36937 8192 40527 8192 32832 8192 65535 57344)
+			fromArray16: #(65535 57344 32832 8192 36943 8192 36937 8192 36936 8192 36937 8192 40527 8192 32832 8192 65535 57344)
 			offset: -10@-5).! !
 
 !HistorySplitter methodsFor: 'access'!
@@ -2143,7 +2143,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(0 0 0 6192 65534 33026 41338 41290 41282 41290 48506 33026 65534 896 0 0)
+		fromArray16: #(0 0 0 6192 65534 33026 41338 41290 41282 41290 48506 33026 65534 896 0 0)
 		offset: 0@0).
 	explainText _ 'A HistorySplitter splits the value of a node into its current and previous values.'.! !
 
@@ -2287,7 +2287,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(65535 32769 32769 34401 34401 32769 32769 34833 34785 32769 65535 256 256 896 896 896)
+		fromArray16: #(65535 32769 32769 34401 34401 32769 32769 34833 34785 32769 65535 256 256 896 896 896)
 		offset: 0@0).
 	explainText _ 'A FormPrinter shows a Smalltalk Form in a box. The Form can be edited using the yellow (option-mouse) button hack.'.
 	PenForm _ (Form extent: 1@1) black.! !
@@ -2517,7 +2517,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(65532 32774 49142 32774 49142 32774 65534 61502 65534 32774 49142 32774 49142 32774 65534 32766)
+		fromArray16: #(65532 32774 49142 32774 49142 32774 65534 61502 65534 32774 49142 32774 49142 32774 65534 32766)
 		offset: 0@0).
 	explainText _ 'A ScrollingListThing consists of a scroll bar, a menu Thing, and nodes to hold the list of menu items (itemsList) and the selected item (selectedItem). It also has several variables that it uses internally such as the visible item count and the index of the first item to display.'.! !
 
@@ -2579,7 +2579,7 @@ form
 
 	^Form
 		extent: 14@17
-		fromArray: #(7936 9088 16844 49388 61664 63712 63712 28908 236 192 448 384 768 1536 3072 6144 24576)
+		fromArray16: #(7936 9088 16844 49388 61664 63712 63712 28908 236 192 448 384 768 1536 3072 6144 24576)
 		offset: 6@0! !
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -2595,7 +2595,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(3968 4544 8422 24694 30832 31856 31856 14454 118 96 96 192 384 768 1536 3072)
+		fromArray16: #(3968 4544 8422 24694 30832 31856 31856 14454 118 96 96 192 384 768 1536 3072)
 		offset: 0@0).
 	explainText _ 'A BassClefThing is a staff with a built in bass clef. See the comment for TrebleClefThing for further details.'.! !
 
@@ -2659,7 +2659,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(0 65535 0 0 4492 12882 4162 4236 4354 4626 15308 0 0 65535 0 0)
+		fromArray16: #(0 65535 0 0 4492 12882 4162 4236 4354 4626 15308 0 0 65535 0 0)
 		offset: 0@0).
 	explainText _ 'A NumberText is like a BasicTextThing except that it parses numbers on keyboard entry and stores the resulting numeric value in its node rather than the string itself.'.! !
 
@@ -2729,7 +2729,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(65535 32769 41753 42149 41093 41241 41477 42021 42905 32769 65535 256 256 896 896 896)
+		fromArray16: #(65535 32769 41753 42149 41093 41241 41477 42021 42905 32769 65535 256 256 896 896 896)
 		offset: 0@0).
 	explainText _ 'A NumberPrinter is a numeric value holder that prints its contents in a box. The value may be edited by typing digits, backspaces, the decimal point, and/or the minus sign while the NumberPrinter is selected.'.! !
 
@@ -2839,7 +2839,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(544 4104 0 16386 0 32768 1 384 33152 1 0 0 16398 14 4110 576)
+		fromArray16: #(544 4104 0 16386 0 32768 1 384 33152 1 0 0 16398 14 4110 576)
 		offset: 0@0).
 	explainText _ 'An OrbitThing consists of two Points, a center and a satellite. It also has two NumberTexts for specifying the orbit radius and rate (the rate specifies how many degrees to increment theta each iteration).'.! !
 
@@ -2876,7 +2876,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(65535 32769 41753 42149 41093 41241 41477 42021 42905 32769 65535 384 384 0 0 0)
+		fromArray16: #(65535 32769 41753 42149 41093 41241 41477 42021 42905 32769 65535 384 384 0 0 0)
 		offset: 0@0).
 	explainText _ 'A NumberDisplayer consists of a fixed-size box for displaying the number plus a node to hold the number. The relative locations of the node and display box are fixed by constraints. A NumberDisplayer accepts the keyboard input of numbers just like a NumberPrinter.'.! !
 
@@ -2962,11 +2962,11 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@15
-		fromArray: #(960 960 960 960 65535 32769 32769 34833 34833 48765 34833 34833 32769 32769 65535)
+		fromArray16: #(960 960 960 960 65535 32769 32769 34833 34833 48765 34833 34833 32769 32769 65535)
 		offset: 0@0).
 	DisplayForm _ (Form
 		extent: 16@15
-		fromArray: #(960 960 960 960 65535 32769 32769 34833 34833 48765 34833 34833 32769 32769 65535)
+		fromArray16: #(960 960 960 960 65535 32769 32769 34833 34833 48765 34833 34833 32769 32769 65535)
 		offset: -8@-2).
 	explainText _ 'A Incrementor is history constraint that makes the current value of its node greater by some increment each time history advances.'.! !
 
@@ -3045,7 +3045,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #( 0 16383 8193 11197 8193 11757 8193 61301 57345 11229 8193 11757 8193 8193 16383 0)
+		fromArray16: #( 0 16383 8193 11197 8193 11757 8193 61301 57345 11229 8193 11757 8193 8193 16383 0)
 		offset: 0@0).
 	explainText _ 'A ParagraphThing is a read-only viewer for text.'.! !
 
@@ -3135,7 +3135,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(0 65535 0 0 4559 14633 27944 17864 32040 17705 17871 0 0 65535 0 0)
+		fromArray16: #(0 65535 0 0 4559 14633 27944 17864 32040 17705 17871 0 0 65535 0 0)
 		offset: 0@0).
 	explainText _ 'A TextThing is like a BasicTextThing except that its node and box outline are invisible. It is handy for adding labels to a Thing.'.! !
 
@@ -3227,7 +3227,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(384 384 65535 32769 34689 35937 39105 38913 38913 39009 36033 34689 32769 65535 384 384)
+		fromArray16: #(384 384 65535 32769 34689 35937 39105 38913 38913 39009 36033 34689 32769 65535 384 384)
 		offset: 0@0).
 	explainText _ 'A CustomConstaint allows the user to define his own constraint function over N variables.'.! !
 
@@ -3278,7 +3278,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(0 65535 0 0 4559 14633 27944 17864 32040 17705 17871 0 0 65535 0 0)
+		fromArray16: #(0 65535 0 0 4559 14633 27944 17864 32040 17705 17871 0 0 65535 0 0)
 		offset: 0@0).
 	explainText _ 'A TreeNodeThing holds an editable string that may be used as a label in a tree.'.! !
 
@@ -3420,7 +3420,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(0 128 128 128 672 448 128 4095 4097 8195 16389 32761 16401 16402 16404 32760)
+		fromArray16: #(0 128 128 128 672 448 128 4095 4097 8195 16389 32761 16401 16402 16404 32760)
 		offset: 0@0).
 	explainText _ 'A ButtonThing consists of a label and a Node. The Node value is 1 while the button is depressed, 0 otherwise.'.! !
 
@@ -3789,7 +3789,7 @@ initializeValues
 	self set: #op.opForm to:
 		(Form
 			extent: 9@11
-			fromArray: #(15872 16640 32896 46720 40064 34944 40064 46720 32896 16640 15872)
+			fromArray16: #(15872 16640 32896 46720 40064 34944 40064 46720 32896 16640 15872)
 			offset: -4@-5).! !
 
 !Product methodsFor: 'access'!
@@ -3811,7 +3811,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ Form
 		extent: 16@16
-		fromArray: #(8184 16380 28686 57351 49155 50211 49731 49539 49539 49731 50211 49155 57351 28686 16380 8184)
+		fromArray16: #(8184 16380 28686 57351 49155 50211 49731 49539 49539 49731 50211 49155 57351 28686 16380 8184)
 		offset: 0@0.
 	explainText _ 'A Product is a three operand arithmetic constraint, x * y = z'.! !
 
@@ -3843,7 +3843,7 @@ initializeValues
 	self set: #opForm to:
 		(Form
 			extent: 9@9
-			fromArray: #(65408 32896 40064 41600 33920 34944 32896 34944 65408)
+			fromArray16: #(65408 32896 40064 41600 33920 34944 32896 34944 65408)
 			offset: -4@-4).! !
 
 !TwoWayOp methodsFor: 'glyphs'!
@@ -3931,7 +3931,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(8184 16380 28686 59367 53235 52275 52787 50787 49347 49539 49155 49539 57735 28686 16380 8184)
+		fromArray16: #(8184 16380 28686 59367 53235 52275 52787 50787 49347 49539 49155 49539 57735 28686 16380 8184)
 		offset: 0@0).
 	explainText _ 'A TwoWayOp is a template for two operand operators. It is used as a sub-part of other Things, rather than as a stand-alone Thing. It provides two Nodes and an operator Form.'.! !
 
@@ -3968,7 +3968,7 @@ initializeValues
 	self set: #op.opForm to:
 		(Form
 			extent: 9@9
-			fromArray: #(32512 65408 60288 60288 48768 56704 58240 65408 32512 )
+			fromArray16: #(32512 65408 60288 60288 48768 56704 58240 65408 32512 )
 			offset: -4@-4).! !
 
 !Invert methodsFor: 'access'!
@@ -3990,7 +3990,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ Form
 		extent: 16@16
-		fromArray: #(8184 16380 32766 65535 63903 63903 65535 65535 65535 59367 58311 61455 63519 32766 16380 8184)
+		fromArray16: #(8184 16380 32766 65535 63903 63903 65535 65535 65535 59367 58311 61455 63519 32766 16380 8184)
 		offset: 0@0.
 	explainText _ 'An Invert is a two operand Form constraint, a = invert(b)'.! !
 
@@ -4029,7 +4029,7 @@ initializeValues
 	self set: #op.opForm to:
 		(Form
 			extent: 21@9
-			fromArray: #(65535 63488 32800 2048 37156 18432 35364 18432 33827 34816 35361 2048 37153 2048 32800 2048 65535 63488)
+			fromArray16: #(65535 63488 32800 2048 37156 18432 35364 18432 33827 34816 35361 2048 37153 2048 32800 2048 65535 63488)
 			offset: -10@-5).! !
 
 !PointSplitter methodsFor: 'access'!
@@ -4055,7 +4055,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(0 0 0 0 14392 14392 65535 33025 42309 39225 39185 42257 33025 65535 0 0)
+		fromArray16: #(0 0 0 0 14392 14392 65535 33025 42309 39225 39185 42257 33025 65535 0 0)
 		offset: 0@0).
 	explainText _ 'A PointSplitter relates a point to separate nodes for its x and y parts. This allows one to perform arithmetic on points.'.! !
 
@@ -4090,7 +4090,7 @@ initializeValues
 	self set: #op.opForm to:
 		(Form
 			extent: 9@9
-			fromArray: #(32512 49536 46720 46720 32896 48768 48768 49536 32512)
+			fromArray16: #(32512 49536 46720 46720 32896 48768 48768 49536 32512)
 			offset: -4@-4).! !
 
 !FatBits methodsFor: 'access'!
@@ -4112,7 +4112,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(8184 16380 28686 58983 52851 52851 52851 49155 55323 56379 57339 53235 59367 28686 16380 8184)
+		fromArray16: #(8184 16380 28686 58983 52851 52851 52851 49155 55323 56379 57339 53235 59367 28686 16380 8184)
 		offset: 0@0).
 	explainText _ 'A FatBits is a two operand graphic Thing.  One Form is constrainted to be twice the size of the other.'.! !
 
@@ -4147,7 +4147,7 @@ initializeValues
 	self set: #op.opForm to:
 		(Form
 			extent: 9@9
-			fromArray: #(32512 49536 40064 41600 32896 38016 32896 49536 32512)
+			fromArray16: #(32512 49536 40064 41600 32896 38016 32896 49536 32512)
 			offset: -4@-4).! !
 
 !VerticalFlip methodsFor: 'access'!
@@ -4169,7 +4169,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(8184 16380 28686 57351 51171 53235 52275 49155 49155 50787 50787 50787 57351 28686 16380 8184)
+		fromArray16: #(8184 16380 28686 57351 51171 53235 52275 49155 49155 50787 50787 50787 57351 28686 16380 8184)
 		offset: 0@0).
 	explainText _ 'VerticalFlip flips a Form about the X axis, i.e. it turns things upside down.'.! !
 
@@ -4326,33 +4326,33 @@ downForm
 	(type == 1) ifTrue:
 		[^(Form
 			extent: 6@20
-			fromArray: #(14336 31744 64512 63488 61440 34816 33792 33792 35840 38912 47104 62464 58368 52224 39936 47104 61440 57344 49152 32768)
+			fromArray16: #(14336 31744 64512 63488 61440 34816 33792 33792 35840 38912 47104 62464 58368 52224 39936 47104 61440 57344 49152 32768)
 			offset: -3@-2)].
 	(type == 2) ifTrue:
 		[^(Form
 			extent: 7@20
-			fromArray: #( 14336 31744 64512 63488 61440 33792 33280 33280 33280 33280 34304 34304 35840 39936 47104 61440 57344 49152 32768 32768)
+			fromArray16: #( 14336 31744 64512 63488 61440 33792 33280 33280 33280 33280 34304 34304 35840 39936 47104 61440 57344 49152 32768 32768)
 			offset: -3@-2)].
 	(type == 3) ifTrue:
 		[^(Form
 			extent: 6@20
-			fromArray: #( 14336 31744 64512 63488 61440 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768)
+			fromArray16: #( 14336 31744 64512 63488 61440 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768)
 			offset: -3@-2)].
 	(type == 4) ifTrue:
 		[^(Form
 			extent: 6@20
-			fromArray: #(14336 25600 52224 38912 61440 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768)
+			fromArray16: #(14336 25600 52224 38912 61440 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768)
 			offset: -3@-2)].
 	(type == 5) ifTrue:
 		[^(Form
 			extent: 9@5
-			fromArray: #(7936 26496 58240 62208 31744)
+			fromArray16: #(7936 26496 58240 62208 31744)
 			offset: -4@-2)].
 
 	"default: pretend I am a quarter note"
 	^(Form
 			extent: 6@20
-			fromArray: #( 14336 31744 64512 63488 61440 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768)
+			fromArray16: #( 14336 31744 64512 63488 61440 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768 32768)
 			offset: -3@-2)!
 
 form
@@ -4376,33 +4376,33 @@ upForm
 	(type == 1) ifTrue:
 		[^(Form
 			extent: 11@21
-			fromArray: #(1024 1024 1536 1792 1792 1408 1216 1088 1632 1824 1952 1248 1088 1056 1056 1056 15392 31808 64512 63488 28672)
+			fromArray16: #(1024 1024 1536 1792 1792 1408 1216 1088 1632 1824 1952 1248 1088 1056 1056 1056 15392 31808 64512 63488 28672)
 			offset: -3@-18)].
 	(type == 2) ifTrue:
 		[^(Form
 			extent: 11@21
-			fromArray: #(1024 1024 1536 1792 1920 1472 1216 1120 1120 1056 1056 1056 1056 1056 1088 1152 15360 31744 64512 63488 28672)
+			fromArray16: #(1024 1024 1536 1792 1920 1472 1216 1120 1120 1056 1056 1056 1056 1056 1088 1152 15360 31744 64512 63488 28672)
 			offset: -3@-18)].
 	(type == 3) ifTrue:
 		[^(Form
 			extent: 6@20
-			fromArray: #(1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 15360 31744 64512 63488 28672)
+			fromArray16: #(1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 15360 31744 64512 63488 28672)
 			offset: -3@-17)].
 	(type == 4) ifTrue:
 		[^(Form
 			extent: 6@20
-			fromArray: #(1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 15360 25600 52224 38912 28672)
+			fromArray16: #(1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 15360 25600 52224 38912 28672)
 			offset: -3@-17)].
 	(type == 5) ifTrue:
 		[^(Form
 			extent: 9@5
-			fromArray: #(7936 26496 58240 62208 31744)
+			fromArray16: #(7936 26496 58240 62208 31744)
 			offset: -4@-2)].
 
 	"default: pretend I am a quarter note"
 	^(Form
 		extent: 6@20
-		fromArray: #(1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 15360 31744 64512 63488 28672)
+		fromArray16: #(1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 1024 15360 31744 64512 63488 28672)
 		offset: -3@-17)!
 
 visibleGlyphsInto: aSet
@@ -4422,7 +4422,7 @@ initialize
 	self initializePrimitive.
 	partIcon _ (Form
 		extent: 16@16
-		fromArray: #(128 192 224 240 184 152 140 140 140 140 136 1936 3968 8064 7936 3584)
+		fromArray16: #(128 192 224 240 184 152 140 140 140 140 136 1936 3968 8064 7936 3584)
 		offset: 0@0).
 	explainText _ 'A NoteThing represents a displayable note. It has a pitch, a duration type, a starting time, a stem direction, and a location.'.! !
 
