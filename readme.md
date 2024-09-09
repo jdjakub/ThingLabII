@@ -34,6 +34,8 @@ ParcPlace release 2.3).
 
 ![Constraint Debugger](debugger.jpg)
 
+![Rigid rod chain demo](rods-demo.gif)
+
 Instructions: open `snapshots/ThingLab2.image` (WIP)
 
 ```smalltalk

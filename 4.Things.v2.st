@@ -2613,7 +2613,7 @@ BasicTextThing subclass: #NumberText
 initializeValues
 
 	self set: #box.extent.x to: 46.
-	self set: #box.extent.y to: 15.
+	self set: #box.extent.y to: 30.
 	self set: #node.location.x to: 33.
 	self set: #node.location.y to: 28.
 	self set: #node.value to: 0.! !

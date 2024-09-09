@@ -2096,7 +2096,7 @@ open
 	topView addSubView: thingDefinerView.
 	topView label: 'Thing Definer'.
 	topView minimumSize: 100@50.
-	topView icon: (Icon constantNamed: #default).
+	"topView icon: (Icon constantNamed: #default)."
 	topView controller open! !
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 

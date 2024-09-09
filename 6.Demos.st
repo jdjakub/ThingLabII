@@ -762,7 +762,7 @@ addLayoutConstraints
 				(('r', row printString, 'c', col printString) asSymbol).
 			 square set: #fillRule to: (Form over).
 			 square set: #fillMask to:
-				((black) ifTrue: [Color black] ifFalse: [Form lightGray]).
+				((black) ifTrue: [Color black] ifFalse: [Color lightGray]).
 			 (previousSquare isNil)
 				ifTrue:
 					["this is the first square of a new row"
