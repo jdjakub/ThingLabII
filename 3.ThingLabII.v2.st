@@ -19,7 +19,7 @@ Bjorn N. Freeman-Benson with the guidance of Alan Borning."!
 extent: extentPoint fromArray16: anArray offset: offsetPoint
 	"Answer an instance of me of depth 1 with bitmap initialized from anArray."
 	
-	| array |
+	| array width numRows num16words aligned32bits |
 	"ThingLab provides bitmap data in 16-bit Arrays. E.g:
 		- 9x5: rows get zero-padded to 16x5, i.e. 5 16-bit array elements
 		- 22x5: rows get zero-padded to 32x5 = (16 + 16)x5, i.e. 10 16-bit array elements
@@ -27,17 +27,28 @@ extent: extentPoint fromArray16: anArray offset: offsetPoint
 	However, 21st Century Squeak wants Bitmaps to have 32-bit words, so we have to rejiggle them.
 	SEE ALSO: Comment in Cursor>>extent:fromArray:offset:, which handles this specifically for 16x16"
 	array := anArray.
-	"First, ensure a minimum row width of 32 bits."
-	extentPoint x <= 16 ifTrue: [ | expandedArray |
-		"array: xxxx xxxx xxxx xxxx xxxx xxxx"
-		expandedArray := Array new: array size * 2.
-		array withIndexDo: [:hi :i | expandedArray at: 2*i-1 put: hi; at: 2*i put: 0].
+	width := extentPoint x.
+	numRows := extentPoint y.
+	num16words := width + 15 // 16.
+	aligned32bits := num16words even.
+	"First, ensure rows are aligned to 32 bits."
+	aligned32bits ifFalse: [ | expandedArray inPos outPos |
+		"array: xxxx xxxx xxxx
+				xxxx xxxx xxxx"
+		expandedArray := Array new: array size + numRows. "1 padding 16word per row"
+		inPos := outPos := 1.
+		(1 to: numRows) do: [:row |
+			(1 to: num16words) do: [: this16word |
+				expandedArray at: outPos put: (array at: inPos).
+				inPos := inPos + 1.
+				outPos := outPos + 1.
+			].
+			expandedArray at: outPos put: 0.
+			outPos := outPos + 1.
+		].
 		array := expandedArray.
-		"array: xxxx 0000 xxxx 0000 xxxx 0000 xxxx 0000 xxxx 0000 xxxx 0000"
-	].
-	"Before we pair everything up, ensure there isn't an unpaired 16-word at the end."
-	array size odd ifTrue: [
-		array := array copyWith: 0.
+		"array: xxxx xxxx xxxx 0000
+				xxxx xxxx xxxx 0000"
 	].
 	"    16-bit xxxx xxxx xxxx xxxx xxxx xxxx"
 	" => 32-bit  xxxxxxxx  xxxxxxxx  xxxxxxxx"
@@ -6689,7 +6700,6 @@ open
 	topView translateBy:
 		(topView displayBox amountToTranslateWithin: Display boundingBox).
 	ScheduledControllers schedulePassive: topView controller.
-	ScheduledControllers activeController flushDisplayBits.
 	topView display.
 	^inView! !
 
@@ -14295,7 +14305,9 @@ syncWithReality: viewBox
 	((SystemOrganization
 		listAtCategoryNamed: 'Things-Built' asSymbol),
 	(SystemOrganization
-		listAtCategoryNamed: 'Things-Primitive' asSymbol)) do:
+		listAtCategoryNamed: 'Things-Primitive' asSymbol),
+	(SystemOrganization
+		listAtCategoryNamed: 'Things-Private' asSymbol)) do:
 			[: sym |
 			 realThings add: (Smalltalk at: sym) prototype.
 			 BusyCursor inc].
