@@ -36,6 +36,8 @@ ParcPlace release 2.3).
 
 ![Rigid rod chain demo](rods-demo.gif)
 
+![Creating a new Thing](point-splitter.gif)
+
 Instructions: open `snapshots/ThingLab2.image` (WIP)
 
 ```smalltalk
