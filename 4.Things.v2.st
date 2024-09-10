@@ -64,7 +64,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		at: (aDisplayPoint + (x@y))
 		clippingBox: clipBox
 		rule: (Form paint)
-		fillColor: (Color black)!
+		fillColor: nil!
 
 glyphDependsOn
 
@@ -431,7 +431,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		at: (aDisplayPoint + point asPoint)
 		clippingBox: clipBox
 		rule: (Form paint)
-		fillColor: (Color black).!
+		fillColor: nil.!
 
 glyphDependsOn
 
@@ -1115,7 +1115,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		at: (aDisplayPoint + (location asPoint))
 		clippingBox: clipBox
 		rule: (Form paint)
-		fillColor: (Color black)!
+		fillColor: nil!
 
 glyphDependsOn
 
@@ -1347,7 +1347,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		at: (aDisplayPoint + (node location asPoint))
 		clippingBox: clipBox
 		rule: (Form paint)
-		fillColor: (Color black).!
+		fillColor: nil.!
 
 glyphDependsOn
 
@@ -1569,7 +1569,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		at: (aDisplayPoint + location asPoint)
 		clippingBox: clipBox
 		rule: (Form over)
-		fillColor: (Color black).!
+		fillColor: nil.!
 
 glyphDependsOn
 
@@ -2214,13 +2214,13 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		at: (aDisplayPoint + (location asPoint) - (extent // 2))
 		clippingBox: clipBox
 		rule: (Form over)
-		fillColor: (Color black).
+		fillColor: nil.
 	self node value
 		displayOn: aDisplayMedium
 		at: ((aDisplayPoint + (location asPoint) - (extent // 2)) + (1@1))
 		clippingBox: clipBox
 		rule: (Form over)
-		fillColor: (Color black).!
+		fillColor: nil.!
 
 glyphDependsOn
 
@@ -2935,7 +2935,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		at: (aDisplayPoint + (node location asPoint))
 		clippingBox: clipBox
 		rule: (Form paint)
-		fillColor: (Color black).!
+		fillColor: nil.!
 
 glyphDependsOn
 
@@ -3875,7 +3875,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		at: (aDisplayPoint + location asPoint)
 		clippingBox: clipBox
 		rule: (Form over)
-		fillColor: (Color black).!
+		fillColor: nil.!
 
 glyphDependsOn
 
@@ -4319,7 +4319,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		at: aDisplayPoint + location asPoint	
 		clippingBox: clipBox
 		rule: Form paint
-		fillColor: Color black.!
+		fillColor: nil.!
 
 downForm
 

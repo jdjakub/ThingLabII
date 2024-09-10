@@ -13172,7 +13172,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		at: location + aDisplayPoint
 		clippingBox: clipBox
 		rule: (Form over)
-		fillColor: (Color white).! !
+		fillColor: nil.! !
 
 !ButtonGlyph methodsFor: 'mouse'!
 
@@ -13421,14 +13421,14 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		at: (aDisplayPoint + self iconOffset)
 		clippingBox: clipBox
 		rule: (Form over)
-		fillColor: (Color white).
+		fillColor: nil.
 
 	nameForm
 		displayOn: aDisplayMedium
 		at: (aDisplayPoint + self nameOffset)
 		clippingBox: clipBox
 		rule: (Form over)
-		fillColor: (Color white).!
+		fillColor: nil.!
 
 highlightOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 
@@ -13443,7 +13443,7 @@ highlightOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		at: (aDisplayPoint + self nameOffset)
 		clippingBox: clipBox
 		rule: 12
-		fillColor: (Color black).! !
+		fillColor: nil.! !
 
 !IconGlyph methodsFor: 'private'!
 
@@ -14121,7 +14121,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 			at: location + aDisplayPoint
 			clippingBox: clipBox
 			rule: (Form over)
-			fillColor: (Color white)].!
+			fillColor: nil].!
 
 highlightOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 
@@ -14131,7 +14131,7 @@ highlightOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 			at: location + aDisplayPoint
 			clippingBox: clipBox
 			rule: 12	"reversed"
-			fillColor: (Color black)].! !
+			fillColor: nil].! !
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 ConstraintGlyph class
@@ -14717,20 +14717,20 @@ containsPoint: aPoint
 
 displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 
-	self icon
-		displayOn: aDisplayMedium
-		at: location + aDisplayPoint
-		clippingBox: clipBox
-		rule: (Form under)
-		fillColor: (Color black).
-
 	showLabel ifTrue:
 		[nameForm
 			displayOn: aDisplayMedium
 			at: location + aDisplayPoint + (0@15)
 			clippingBox: clipBox
 			rule: (Form over)
-			fillColor: (Color white)].!
+			fillColor: nil].
+			
+	self icon
+		displayOn: aDisplayMedium
+		at: location + aDisplayPoint
+		clippingBox: clipBox
+		rule: (Form over)
+		fillColor: nil.!
 
 highlightOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 
@@ -14749,7 +14749,7 @@ highlightOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 			at: location + aDisplayPoint + (0@15)
 			clippingBox: clipBox
 			rule: 12	"reversed"
-			fillColor: (Color black)].! !
+			fillColor: nil].! !
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 VariableGlyph class
