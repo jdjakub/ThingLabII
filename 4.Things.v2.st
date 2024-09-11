@@ -4318,7 +4318,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		displayOn: aDisplayMedium
 		at: aDisplayPoint + location asPoint	
 		clippingBox: clipBox
-		rule: Form paint
+		rule: Form and
 		fillColor: nil.!
 
 downForm

@@ -12625,7 +12625,7 @@ changeIcon
 	| arg |
 	arg _ self argument.
 	(arg notNil and: [model isAllParts | arg holdsPartsBin])
-		ifTrue: [NotifyingBitEditor openOnForm: arg icon client: view]
+		ifTrue: [arg icon bitEdit]
 		ifFalse: [view flash].!
 
 changeName
@@ -13492,7 +13492,7 @@ displayOn: aDisplayMedium at: aDisplayPoint clippingBox: clipBox
 		displayOn: aDisplayMedium
 		at: aDisplayPoint + location
 		clippingBox: clipBox
-		rule: Form paint
+		rule: Form and
 		fillColor: nil.!
 
 form
